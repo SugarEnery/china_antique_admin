@@ -10,7 +10,7 @@
                 <el-input v-model="formSearch.mobile" placeholder="请输入用户手机号"></el-input>
             </el-form-item>
             <el-form-item label="订单" prop="order">
-               <el-select v-model="formSearch.order" placeholder="请选择关注状态">
+               <el-select v-model="formSearch.order" placeholder="请选择排序">
                   <el-option label="从早到晚" value="1"></el-option>
                   <el-option label="从晚到早" value="1"></el-option>
                </el-select>
@@ -19,8 +19,8 @@
             <el-form-item label=" " style="margin-left:50px;">
                 <el-button type="primary" @click="onSearch">查询</el-button>
                 <el-button type="warning" plain @click="onReset">重置</el-button>
-                <el-button @click="exportExcel()">导出</el-button>
-                <el-button @click="exportundistributed()">导出未分配资源</el-button>
+                <!-- <el-button @click="exportExcel()">导出</el-button>
+                <el-button @click="exportundistributed()">导出未分配资源</el-button> -->
             </el-form-item>
             <!-- 接收到新用户在后台页面弹框提示给管理员 -->
             <template>
@@ -40,34 +40,17 @@
         <!-- 操作区----end -->
         <!-- 表格---start -->
         <el-table :data="tableData" class="clientsBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
-            <el-table-column type="selection" width="60">
-            </el-table-column>
+            <!-- <el-table-column type="selection" width="60">
+            </el-table-column> -->
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
                 <!-- <template slot-scope="scope">
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
                 </template> -->
             </el-table-column>
-
-            <el-table-column prop="created_time" label="注册时间" align="center" width="200" >
-              <template slot-scope="scope">
-                 {{ scope.row.created_time == ""? '暂无' :scope.row.created_time }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
-              <template slot-scope="scope">
-                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
-              </template>
-            </el-table-column>
             <el-table-column prop="name" label="姓名" align="center">
               <template slot-scope="scope">
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
-            </el-table-column>
-            <el-table-column prop="image" label="亲笔签名" align="center"  min-width="150" height="100">
-               <!-- 图片的显示 -->
-               <template slot-scope="scope">
-                  <img :src="scope.row.image"  min-width="100" />
-               </template>
             </el-table-column>
             <el-table-column prop="mobile" label="手机" align="center" min-width="120" >
               <template slot-scope="scope">
@@ -79,6 +62,24 @@
                  {{ scope.row.address == null? '暂无' :scope.row.address }}
               </template>
             </el-table-column>
+            <el-table-column prop="image" label="头像" align="center"  min-width="100" height="50">
+               <!-- 图片的显示 -->
+               <template slot-scope="scope">
+                  <img :src="scope.row.image"  min-width="100" />
+               </template>
+            </el-table-column>
+            <el-table-column prop="created_time" label="注册时间" align="center" width="200" >
+              <template slot-scope="scope">
+                 {{ scope.row.created_time == ""? '暂无' :scope.row.created_time }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
+              <template slot-scope="scope">
+                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
+              </template>
+            </el-table-column>
+
+
             <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
                 <font v-if="scope.row.start_time == 0" >暂无</font>
@@ -87,9 +88,6 @@
             </el-table-column>
             <el-table-column prop="is_vip" label="会员" align="center" >
               <template slot-scope="scope">
-                 <!-- <font v-if="scope.row.is_vip === '1970-01-01 08:00:00'" color="red">未关注</font>
-                 <font v-else-if="scope.row.user_status === 0" color="green">取消关注</font>
-                 <font v-else-if="scope.row.user_status ===1" >关注</font> -->
                  {{ scope.row.is_vip == 0 ?'否':scope.row.is_vip == 1?'是':'' }}
               </template>
             </el-table-column>
@@ -98,9 +96,9 @@
                     <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
                     <!-- 接口删除 -->
                     <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-					<a href="#" style="color: #00D1B2" @click="appropriateness(scope.row)"><el-button size="mini" >适当性</el-button></a>
+					<!-- <a href="#" style="color: #00D1B2" @click="appropriateness(scope.row)"><el-button size="mini" >适当性</el-button></a>
                     <a href="#" style="color: #00D1B2" @click="applyNum(scope.row)" ><el-button size="mini" >申请</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="allotUser(scope.row)" ><el-button size="mini" >分配</el-button></a>
+                    <a href="#" style="color: #00D1B2" @click="allotUser(scope.row)" ><el-button size="mini" >分配</el-button></a> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -573,28 +571,33 @@ export default {
                 this.$message('使用文档不可删除');
                 return;
             }
-            var id=rowData.id;
-            var name
-            name=localStorage.getItem("name");
+
+            // var ids = new Array();
+            var id = rowData.id;
+            id = id.split(",");
             this.$confirm('此操作将永久删除, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                    apis.msgApi.clientdelete({id:id,name:name})
+                    apis.msgApi.clientdelete({ids:id})
                     .then((data)=>{
-                      if( data.data.error_code == 1000){
-                        this.$message({message: '权限不足！',type: "error"});
-                      }else{
+                      console.log(data);
+                      if( data.data.code == 1){
                         this.$message({message: '执行成功',type: "success"});
+                        this.onSearch();
+                      }else if( data.data.code == -1){
+                        this.$message({message: data.data.msg,type: "error"});
                         this.onSearch();
                       }
                     })
                     .catch((err)=>{
+                      console.log(err)
                         this.$message({message: '执行失败，请重试',type: "error"});
                     });
 
-            }).catch(() => {
+            }).catch((error) => {
+              console.log(error)
                 this.$message({type: 'info',message: '已取消删除'});
             });
 

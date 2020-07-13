@@ -461,8 +461,11 @@ export default {
       return Axios.post('/napi/admin/users/update',param);
     },
     // 客户删除/
-    clientdelete({name,id}){
-      return Axios.delete('/napi/admin/users/delete?name='+name+'&id='+id);
+    clientdelete({ids}){
+      var param ={
+        ids
+      }
+      return Axios.post('/napi/homeApi/userInfoDelete',param);
     },
     //用户类型列表/
     userTyle(param){
