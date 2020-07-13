@@ -307,16 +307,16 @@
             }
         }),
         mounted(){
-            var admingroup = localStorage.getItem('admingroup');
-            console.log(admingroup);
-            if(admingroup != 48){
-               this.items.forEach((ele,index)=>{
-                 if(ele.status == '1'){
-                   console.log(index);
-                   this.items.splice(index, 2);
-                 }
-               })
-            }
+            // var admingroup = localStorage.getItem('admingroup');
+            // console.log(admingroup);
+            // if(admingroup != 48){
+            //    this.items.forEach((ele,index)=>{
+            //      if(ele.status == '1'){
+            //        console.log(index);
+            //        this.items.splice(index, 2);
+            //      }
+            //    })
+            // }
         },
         created(){
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏

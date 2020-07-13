@@ -123,9 +123,9 @@ export default {
                     if (data && data.data) {
                         var json = data.data;
                         // console.log(json)
-                        if (json.error_code == 0) {
+                        if (json.code == 1) {
                             console.log("登录成功！");
-                            var token = 'Bearer ' + json.data.access_token;
+                            var token = 'Bearer ' + json.data.token;
                             localStorage.setItem('Authorization',token);
                             if (this.checked == true) {
                                 console.log("checked == true");
@@ -146,7 +146,7 @@ export default {
 
                             //存储按钮权限
                             this.$store.dispatch("add_Permissions", json.data.rolePermissionVoList);
-                            this.$router.replace({ path: "/select" });
+                            this.$router.replace({ path: "/index" });
                             var loginLog={
                                 ip:returnCitySN["cip"],
                                 city:returnCitySN["cname"]+'-'+json.data.userInfo.userName+'-登陆'

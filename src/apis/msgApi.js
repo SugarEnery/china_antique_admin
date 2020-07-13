@@ -3,8 +3,8 @@ import Axios from "axios";
 /**
  * 提供msg相关接口
  */
-var name
-name=localStorage.getItem("name");
+// var name
+// name=localStorage.getItem("name");
 export default {
     add:function({name,city,type,age,gender,qq,text}){
          var param={
@@ -428,55 +428,24 @@ export default {
     },
     // 客户管理
     // 客户列表/
-    clientList({name,user_tel,user_name,type_id,user_status,time_type,start_time,end_time,user_develop_people,user_server_people,page,wx_nickname,user_remark,depart_id,admin_names,is_myself}){
+    clientList({mobile,order,keywords,page,limit}){
       var params =''
-      params+='name='+localStorage.getItem("name")+'&'
+      if(mobile){
+          params+='mobile='+mobile+'&';
+      }
+      if(order){
+          params+='order='+order+'&';
+      }
+      if(keywords){
+          params+='keywords='+keywords+'&';
+      }
       if(page){
         params+='page='+page+'&';
       }
-      if(user_tel){
-          params+='user_tel='+user_tel+'&';
+      if(limit){
+          params+='limit='+limit+'&';
       }
-      if(wx_nickname){
-          params+='wx_nickname='+wx_nickname+'&';
-      }
-      if(user_name){
-          params+='user_name='+user_name+'&';
-      }
-      if(user_remark){
-          params+='user_remark='+user_remark+'&';
-      }
-      if(type_id){
-          params+='type_id='+type_id+'&';
-      }
-      if(user_status){
-          params+='user_status='+user_status+'&';
-      }
-      if(time_type){
-          params+='time_type='+time_type+'&';
-      }
-      if(start_time){
-          params+='start_time='+start_time+'&';
-      }
-      if(end_time){
-          params+='end_time='+end_time+'&';
-      }
-      if(user_develop_people){
-          params+='user_develop_people='+user_develop_people+'&';
-      }
-      if(user_server_people){
-          params+='user_server_people='+user_server_people+'&';
-      }
-      if(depart_id){
-          params+='depart_id='+depart_id+'&';
-      }
-      if(admin_names){
-          params+='admin_names='+admin_names+'&';
-      }
-      if(is_myself){
-          params+='is_myself='+is_myself+'&';
-      }
-      return Axios.get('/napi/admin/users/list?'+params);
+      return Axios.get('/napi/homeApi/userInfo?'+params);
     },
     // 客户修改
     clientEdit({name,id,type_id,user_name,user_remark,user_develop_people,user_server_people}){
