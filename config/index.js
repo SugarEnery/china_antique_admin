@@ -20,7 +20,7 @@ module.exports = {
         }
       },
       '/napi': {
-        target: 'https://wjgzh.hczq.com',
+        target: 'http://api.chinabogu.com',
         changeOrigin: true,
         pathRewrite: {
           '^/napi': '/'

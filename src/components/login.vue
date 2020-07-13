@@ -75,6 +75,7 @@ $input_width:300px;
 
 <script>
 import apis from '../apis/apis';
+import crypto from 'crypto'
 export default {
     name: 'login',
     data() {
@@ -110,13 +111,18 @@ export default {
     methods: {
         login() {
             //调用后端登陆接口
+            const md5 = crypto.createHash('md5')
+                  md5.update(this.formLogin.password)
+                  let password = md5.digest('hex');
+                  this.formLogin.password = password;
+                  console.log(this.formLogin.password)
             apis.shiroApi.loginIn(this.formLogin)
                 .then((data) => {
                     console.log('success:', data);
                     var access_token = data.access_token;
                     if (data && data.data) {
                         var json = data.data;
-                        console.log(json)
+                        // console.log(json)
                         if (json.error_code == 0) {
                             console.log("登录成功！");
                             var token = 'Bearer ' + json.data.access_token;

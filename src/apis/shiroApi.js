@@ -9,11 +9,11 @@ export default {
      */
     loginIn: function ({ loginName, password }) {
         var param = {
-            admin_name: loginName,
-            admin_password: password
+            mobile: loginName,
+            password: password
         };
         // return Axios.post('/api/shiro-api/login', param);
-        return Axios.post('/napi/admin/login/check', param);
+        return Axios.post('/napi//homeApi/login', param);
     },
     /**
      * 退出登陆
