@@ -31,7 +31,7 @@
                     </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="主图" prop="images">
+              <el-form-item>
                 <el-upload
                   :action="form2.doUpload"
                   list-type="picture-card"
@@ -53,8 +53,9 @@
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-             <el-form-item label="主图链接" prop="images">
-                  <el-input v-model="form2.images" placeholder="主图"></el-input>
+
+              <el-form-item label="封面图" prop="article_img">
+                  <el-input v-model="form2.article_img" placeholder="封面图"></el-input>
               </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
@@ -190,8 +191,8 @@ export default {
 
     },
     handleRemove(file, fileList) {//移除图片
-      console.log(file, fileList);
-    },
+            console.log(file, fileList);
+          },
     handlePictureCardPreview(file) {//预览图片时调用
       console.log(file);
       this.dialogImageUrl = file.url;
@@ -210,8 +211,8 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      // this.form2.article_img = res;
-      // this.imageUrl = URL.createObjectURL(file.raw);
+      this.form2.article_img = res;
+      this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
       this.$message.error('上传图片不能超过6张!');

@@ -187,7 +187,6 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-
     beforeAvatarUpload(file) {//文件上传之前调用做一些拦截限制
       console.log(file);
       const isJPG = true;
@@ -200,7 +199,7 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      this.form2.article_img = res;
+      // this.form2.article_img = res;
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
