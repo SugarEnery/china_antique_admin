@@ -1,13 +1,10 @@
 <template>
-    <div class="container clients">
+    <div class="container aution">
         <!-- 查询区----start -->
         <el-form :label-position="labelPosition" :label-width="labelWidth" :inline="true" ref="formSearch" :model="formSearch" class="demo-form-inline">
 
-            <el-form-item label="昵称" prop="keywords">
-                <el-input v-model="formSearch.keywords" placeholder="请输入昵称"></el-input>
-            </el-form-item>
-            <el-form-item label="手机号" prop="mobile">
-                <el-input v-model="formSearch.mobile" placeholder="请输入用户手机号"></el-input>
+            <el-form-item label="名称" prop="keywords">
+                <el-input v-model="formSearch.keywords" placeholder="请输入名称"></el-input>
             </el-form-item>
             <el-form-item label="排序" prop="order">
                <el-select v-model="formSearch.order" placeholder="请选择排序">
@@ -19,19 +16,7 @@
             <el-form-item label=" " style="margin-left:50px;">
                 <el-button type="primary" @click="onSearch">查询</el-button>
                 <el-button type="warning" plain @click="onReset">重置</el-button>
-                <!-- <el-button @click="exportExcel()">导出</el-button>
-                <el-button @click="exportundistributed()">导出未分配资源</el-button> -->
             </el-form-item>
-            <!-- 接收到新用户在后台页面弹框提示给管理员 -->
-            <template>
-              <div class="notification sticky hide" id="sticky">
-                  <p id="content"> </p>
-                  <a class="close" href="javascript:">
-                    <img src="../../../static/img/close.png" class="close_img" id="close_img"/>
-                    </a>
-              </div>
-            </template>
-
         </el-form>
         <!-- 查询区----end -->
         <!-- 操作区----start -->
@@ -39,7 +24,7 @@
         </el-row>
         <!-- 操作区----end -->
         <!-- 表格---start -->
-        <el-table :data="tableData" class="clientsBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
+        <el-table :data="tableData" class="autionBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
             <!-- <el-table-column type="selection" width="60">
             </el-table-column> -->
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
@@ -47,38 +32,49 @@
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
                 </template> -->
             </el-table-column>
-            <el-table-column prop="name" label="姓名" align="center">
+            <el-table-column prop="name" label="名称" align="center" min-width="120" >
               <template slot-scope="scope">
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="mobile" label="手机" align="center" min-width="120" >
+            <el-table-column prop="status" label="状态" align="center" min-width="120" >
               <template slot-scope="scope">
-                 {{ scope.row.mobile == null? '暂无' :scope.row.mobile }}
+                 {{ scope.row.status == null? '暂无' :scope.row.status }}
               </template>
             </el-table-column>
-            <el-table-column prop="address" label="地址" align="center" min-width="150">
+
+            <!-- <el-table-column prop="auction_type" label="拍卖类型" align="center" >
               <template slot-scope="scope">
-                 {{ scope.row.address == null? '暂无' :scope.row.address }}
+                 {{ scope.row.auction_type == null? '暂无' :scope.row.auction_type }}
+              </template>
+            </el-table-column> -->
+            <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
+              <template slot-scope="scope">
+                 {{ scope.row.auction_type_name == null? '暂无' :scope.row.auction_type_name }}
               </template>
             </el-table-column>
-            <el-table-column prop="image" label="头像" align="center"  min-width="100" height="50">
+            <el-table-column prop="starting_price" label="开始价格" align="center" min-width="150">
+              <template slot-scope="scope">
+                 {{ scope.row.starting_price == null? '暂无' :scope.row.starting_price }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="markup_range" label="加价价格" align="center" min-width="150">
+              <template slot-scope="scope">
+                 {{ scope.row.markup_range == null? '暂无' :scope.row.markup_range }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="image" label="图片1" align="center"  min-width="100" >
                <!-- 图片的显示 -->
                <template slot-scope="scope">
                   <img :src="scope.row.image"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="created_time" label="注册时间" align="center" width="200" >
-              <template slot-scope="scope">
-                 {{ scope.row.created_time == ""? '暂无' :scope.row.created_time }}
-              </template>
+            <el-table-column prop="images" label="图片2" align="center"  min-width="100" >
+               <!-- 图片的显示 -->
+               <template slot-scope="scope">
+                  <img :src="scope.row.images"  min-width="100" />
+               </template>
             </el-table-column>
-            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
-              <template slot-scope="scope">
-                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
-              </template>
-            </el-table-column>
-
 
             <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
@@ -86,9 +82,9 @@
                 <font v-else >{{scope.row.start_time}}</font>
               </template>
             </el-table-column>
-            <el-table-column prop="is_vip" label="会员" align="center" >
+            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
               <template slot-scope="scope">
-                 {{ scope.row.is_vip == 0 ?'否':scope.row.is_vip == 1?'是':'' }}
+                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
@@ -145,14 +141,14 @@
 </template>
 
 <style lang="scss">
-.clients{
+.aution{
     // 设置输入框的宽度
     .el-form-item__content {
         // width: 240px;
     }
 
 }
-.clientsBox{
+.autionBox{
   .el-table__header tr,
     .el-table__header th {
       padding: 0;
@@ -161,12 +157,12 @@
   .el-table__body tr,
     .el-table__body td {
       padding: 0;
-      height: 100px;
+      height: 80px;
   }
   .cell img{
     margin: 0;
     padding: 0;
-    height: 100px;
+    height: 80px;
     width: 100%;
   }
 }
@@ -216,7 +212,6 @@ export default {
                 pageTotal: 80,
             },
             formSearch: { //表单查询
-                mobile: '',
                 order: '',
                 keywords: '',
 
@@ -273,7 +268,7 @@ export default {
             }
             let param = Object.assign({}, this.formSearch,this.pageInfo);
             var _this = this;
-            apis.msgApi.clientList(param)
+            apis.msgApi.auctionList(param)
             .then((data)=>{
               console.log(data.data);
                 this.listLoading=false;
@@ -723,45 +718,6 @@ export default {
         openDetail(row){
             // this.$common.OpenNewPage(this,'detail',row);
             this.$router.push({ name: 'detail', query:row})
-        },
-        // 持股==
-        holdList(row){
-            // this.$common.OpenNewPage(this,'hold_list',row);
-            this.$router.push({ name: 'hold_list', query:row})
-        },
-        // 成功
-        successList(row){
-            // this.$common.OpenNewPage(this,'success_list',row);
-            this.$router.push({ name: 'success_list', query:row})
-        },
-        // 失败
-        errorList(row){
-            // this.$common.OpenNewPage(this,'error_list',row);
-            this.$router.push({ name: 'error_list', query:row})
-        },
-        //调仓
-        wareList(row){
-            this.$router.push({ name: 'ware_list', query:row})
-        },
-        // 申请次数
-        applyNum(row){
-            this.$router.push({ name: 'apply_num', query:row})
-        },
-        // 推送数
-        pushNum(row){
-            this.$router.push({ name: 'push_num', query:row})
-        },
-        // 查看数
-        seeNum(row){
-            this.$router.push({ name: 'see_num', query:row})
-        },
-        // 分配管理
-        allotUser(row){
-            this.$router.push({ name: 'allot_user', query:row})
-        },
-        // 适当性
-        appropriateness(row){
-            this.$router.push({ name: 'approp_list', query:row})
         },
     }
 };

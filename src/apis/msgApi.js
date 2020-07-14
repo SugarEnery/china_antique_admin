@@ -43,6 +43,57 @@ export default {
         };
         return Axios.post('/api/msg-api/deleteBatch', param);
     },
+    // 客户管理
+    // 客户列表/
+    clientList({mobile,order,keywords,page,limit}){
+      var params =''
+      if(mobile){
+          params+='mobile='+mobile+'&';
+      }
+      if(order){
+          params+='order='+order+'&';
+      }
+      if(keywords){
+          params+='keywords='+keywords+'&';
+      }
+      if(page){
+        params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/userInfo?'+params);
+    },
+    // 客户删除/
+    clientdelete({ids}){
+      var param ={
+        ids
+      }
+      return Axios.post('/napi/homeApi/userInfoDelete',param);
+    },
+    // 拍卖管理
+    // 拍卖列表/
+    auctionList({order,keywords,page,limit}){
+      var params =''
+      if(order){
+          params+='order='+order+'&';
+      }
+      if(keywords){
+          params+='keywords='+keywords+'&';
+      }
+      if(page){
+        params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/auctionList?'+params);
+    },
+    // 拍卖分类列表
+    auctionTypeList(param){
+        return Axios.get('/napi/homeApi/auctionTypeList', param);
+    },
+
     // 课程列表
     getList({name,wx_id,class_type}){
         var param={
@@ -426,47 +477,8 @@ export default {
     falshDelete({kx_id}){
       return Axios.delete('/napi/admin/newstype/delete?kx_id='+kx_id);
     },
-    // 客户管理
-    // 客户列表/
-    clientList({mobile,order,keywords,page,limit}){
-      var params =''
-      if(mobile){
-          params+='mobile='+mobile+'&';
-      }
-      if(order){
-          params+='order='+order+'&';
-      }
-      if(keywords){
-          params+='keywords='+keywords+'&';
-      }
-      if(page){
-        params+='page='+page+'&';
-      }
-      if(limit){
-          params+='limit='+limit+'&';
-      }
-      return Axios.get('/napi/homeApi/userInfo?'+params);
-    },
-    // 客户修改
-    clientEdit({name,id,type_id,user_name,user_remark,user_develop_people,user_server_people}){
-      var param ={
-        name:localStorage.getItem("name"),
-        id,
-        type_id,
-        user_name,
-        user_remark,
-        user_develop_people,
-        user_server_people
-      }
-      return Axios.post('/napi/admin/users/update',param);
-    },
-    // 客户删除/
-    clientdelete({ids}){
-      var param ={
-        ids
-      }
-      return Axios.post('/napi/homeApi/userInfoDelete',param);
-    },
+
+
     //用户类型列表/
     userTyle(param){
       return Axios.get('/napi/admin/users/type/list',param);
