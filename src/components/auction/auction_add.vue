@@ -53,9 +53,9 @@
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-             <!-- <el-form-item label="主图链接" prop="images">
+             <el-form-item label="主图链接" prop="images">
                   <el-input v-model="form2.images" placeholder="主图"></el-input>
-              </el-form-item> -->
+              </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
                     ref="ue"
@@ -117,10 +117,12 @@ export default {
         markup_range: "",
         image:"",
         images: "",
-        doUpload:'/napi/admin/article/picture_add',
-        productImgs:[],
+        doUpload:'/napi/homeApi/upload',
+        dialogImageUrl: '',
         dialogVisible: false,
+        productImgs: [],
         isMultiple: true,
+        article_img:'',
         imgLimit: 1
       },
       defaultMSG: null,
