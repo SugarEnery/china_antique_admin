@@ -93,6 +93,28 @@ export default {
     auctionTypeList(param){
         return Axios.get('/napi/homeApi/auctionTypeList', param);
     },
+    // 拍卖批量删除
+    auctionDelete({ids}){
+      var param ={
+        ids
+      }
+      return Axios.post('/napi/homeApi/auctionAllDelete',param);
+    },
+    // 添加拍卖
+    auctionAdd({name,image,status,auction_type,starting_price,markup_range,images,start_time,end_time,}){
+      var param ={
+        name,
+        image,
+        status,
+        auction_type,
+        starting_price,
+        markup_range,
+        images,
+        start_time,
+        end_time
+      }
+      return Axios.post('/napi/homeApi/auctionCreate',param);
+    },
 
     // 课程列表
     getList({name,wx_id,class_type}){

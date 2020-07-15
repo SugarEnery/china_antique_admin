@@ -9,7 +9,7 @@
               <el-form-item label="拍卖状态">
                 <el-radio-group v-model="form2.status">
                   <el-radio label="1" >上线</el-radio>
-                  <el-radio label="0" >下线</el-radio>
+                  <el-radio label="2" >下线</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="起拍价" prop="starting_price">
@@ -18,10 +18,7 @@
               <el-form-item label="加价幅度" prop="markup_range">
                   <el-input v-model="form2.markup_range" placeholder="加价幅度"></el-input>
               </el-form-item>
-              <el-form-item label="服务类型" prop="mt_name">
-                  <el-input v-model="form2.mt_name" placeholder="类型名字"></el-input>
-              </el-form-item>
-              <el-form-item label="拍卖分类" prop="id">
+              <el-form-item label="拍卖分类" prop="auction_type">
                 <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
                     <el-option
                     v-for="item in auctionType_info"
@@ -31,12 +28,26 @@
                     </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item>
+              <el-form-item label="开始拍卖时间" prop="start_time">
+                  <el-date-picker
+                    v-model="form2.start_time"
+                    type="datetime"
+                    placeholder="选择日期时间">
+                  </el-date-picker>
+              </el-form-item>
+              <el-form-item label="结束拍卖时间" prop="end_time">
+                  <el-date-picker
+                    v-model="form2.end_time"
+                    type="datetime"
+                    placeholder="选择日期时间">
+                  </el-date-picker>
+              </el-form-item>
+              <el-form-item label="上传主图" prop="image">
                 <el-upload
                   :action="form2.doUpload"
                   list-type="picture-card"
                   accept="image/*"
-                  name = "picture"
+                  name = "file"
                   :headers="headers"
                   :limit="form2.imgLimit"
                   :file-list="form2.productImgs"
@@ -54,8 +65,8 @@
                 </el-dialog>
               </el-form-item>
 
-              <el-form-item label="封面图" prop="article_img">
-                  <el-input v-model="form2.article_img" placeholder="封面图"></el-input>
+              <el-form-item label="主图链接" prop="image">
+                  <el-input v-model="form2.image" placeholder="主图链接"></el-input>
               </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
@@ -65,6 +76,8 @@
                     style="width:100%;">
                   </Ueditor>
               </div>
+
+
               <el-form-item label=" ">
                   <el-button type="primary" @click="submitForm('form2')">立即创建</el-button>
               </el-form-item>
@@ -77,7 +90,7 @@
 // 设置输入框的宽度
 .form02 {
   .el-form-item__content {
-    width: 300px;
+    width: 310px;
     .el-select {
       width: 300px;
     }
@@ -114,6 +127,7 @@ export default {
         auction_type: "",
         status: "",
         starting_price:"",
+        start_time:'',
         end_time:"",
         markup_range: "",
         image:"",
@@ -123,7 +137,6 @@ export default {
         dialogVisible: false,
         productImgs: [],
         isMultiple: true,
-        article_img:'',
         imgLimit: 1
       },
       defaultMSG: null,
@@ -148,7 +161,8 @@ export default {
   computed: {
       headers() {
           return {
-              'Authorization': localStorage.getItem('Authorization')
+              'Authorization': localStorage.getItem('Authorization'),
+              'Access-Control-Allow-Headers':'x-requested-with:content-type'
           }
       }
   },
@@ -211,7 +225,7 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      this.form2.article_img = res;
+      this.form2.image = "http://api.chinabogu.com/"+res.data.filePath;
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
@@ -226,25 +240,23 @@ export default {
     editorReady(instance) {
         instance.setContent(this.form.content);
         instance.addListener('contentChange', () => {
-            this.form2.new_content = instance.getContent();
+            this.form2.images = instance.getContent();
         });
     },
     //表单提交
     submitForm(form2) {
       this.$refs["form02"].validate(valid => {
         if(valid){
-            if(this.form2.is_free == '3' && this.form2.news_money =="0"){
-              this.form2.news_money = this.form2.news_moneys;
-            }
             let param = Object.assign({}, this.form2);
-            apis.msgApi.pushAdd(param)
+            debugger
+            apis.msgApi.auctionAdd(param)
             .then((data)=>{
               console.log(data);
                 if(data&&data.data){
                     var json=data.data;
                      if(json&&json.error_code== 0){
                         this.$message({message: '执行成功',type: "success"});
-                        this.$router.push({ path: '/push_list' })
+                        // this.$router.push({ path: '/auction_list' })
                         this.dialogEdittVisible = false;
                         return;
                     }
