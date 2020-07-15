@@ -45,6 +45,32 @@ var routeDevList = [
         title: '拍卖列表'
       }
     },
+    {
+      name: 'order_list',
+      path: '/order_list',
+      component: resolve => require(['@/components/auction/order_list.vue'], resolve),
+      meta: {
+        title: '拍卖订单列表'
+      }
+    },
+    {
+      name: 'platformidentifi_list',
+      path: '/platformidentifi_list',
+      component: resolve => require(['@/components/identifi/platformidentifi_list.vue'], resolve),
+      meta: {
+        title: '平台鉴定列表'
+      }
+    },
+    {
+      name: 'expertsidentifi_list',
+      path: '/expertsidentifi_list',
+      component: resolve => require(['@/components/identifi/expertsidentifi_list.vue'], resolve),
+      meta: {
+        title: '专家鉴定列表'
+      }
+    },
+
+
     // {
     //   name: 'permis_rules',
     //   path: '/permis_rules',

@@ -79,7 +79,29 @@
                             {
                                 index: 'auction_add',
                                 title: '拍卖添加'
-                            }
+                            },
+                            {
+                                index: 'order_list',
+                                title: '拍卖订单列表'
+                            },
+
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-star-on',
+                        index: 'identifi',
+                        title: '鉴定管理',
+                        subs: [
+                            {
+                                index: 'platformidentifi_list',
+                                title: '平台鉴定列表'
+                            },
+                            {
+                                index: 'expertsidentifi_list',
+                                title: '专家鉴定列表'
+                            },
+                            
+
                         ]
                     },
                     // {

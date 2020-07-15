@@ -1,108 +1,106 @@
 <template>
-    <div class="container clients">
+    <div class="container aution">
         <!-- 查询区----start -->
         <el-form :label-position="labelPosition" :label-width="labelWidth" :inline="true" ref="formSearch" :model="formSearch" class="demo-form-inline">
 
-            <el-form-item label="昵称" prop="keywords">
-                <el-input v-model="formSearch.keywords" placeholder="请输入昵称"></el-input>
+            <el-form-item label="支付状态" prop="order_status">
+               <el-select v-model="formSearch.order_status" placeholder="请选择排序">
+                  <el-option label="待支付" value="1"></el-option>
+                  <el-option label="已支付" value="2"></el-option>
+               </el-select>
             </el-form-item>
-            <el-form-item label="手机号" prop="mobile">
-                <el-input v-model="formSearch.mobile" placeholder="请输入用户手机号"></el-input>
-            </el-form-item>
-            <el-form-item label="排序" prop="order">
-               <el-select v-model="formSearch.order" placeholder="请选择排序">
-                  <el-option label="从早到晚" value="1"></el-option>
-                  <el-option label="从晚到早" value="1"></el-option>
+            <el-form-item label="排序" prop="price_order">
+               <el-select v-model="formSearch.price_order" placeholder="请选择排序">
+                  <el-option label="从低到高" value="1"></el-option>
+                  <el-option label="从高到低" value="2"></el-option>
                </el-select>
             </el-form-item>
 
             <el-form-item label=" " style="margin-left:50px;">
                 <el-button type="primary" @click="onSearch">查询</el-button>
                 <el-button type="warning" plain @click="onReset">重置</el-button>
-                <!-- <el-button @click="exportExcel()">导出</el-button>
-                <el-button @click="exportundistributed()">导出未分配资源</el-button> -->
             </el-form-item>
-            <!-- 接收到新用户在后台页面弹框提示给管理员 -->
-            <template>
-              <div class="notification sticky hide" id="sticky">
-                  <p id="content"> </p>
-                  <a class="close" href="javascript:">
-                    <img src="../../../static/img/close.png" class="close_img" id="close_img"/>
-                    </a>
-              </div>
-            </template>
-
         </el-form>
         <!-- 查询区----end -->
         <!-- 操作区----start -->
         <el-row class="mgb15">
+            <!-- <el-button size="small" round type="primary" @click="handleAdd">新增</el-button> -->
+            <el-button size="small" round type="danger" @click="deleteMany">批量删除</el-button>
         </el-row>
         <!-- 操作区----end -->
         <!-- 表格---start -->
-        <el-table :data="tableData" class="clientsBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
-            <!-- <el-table-column type="selection" width="60">
-            </el-table-column> -->
+        <el-table :data="tableData" class="autionBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
+            <el-table-column type="selection" width="60">
+            </el-table-column>
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
                 <!-- <template slot-scope="scope">
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
                 </template> -->
             </el-table-column>
-            <el-table-column prop="name" label="姓名" align="center">
+            <el-table-column prop="user_name" label="用户" align="center" >
+              <template slot-scope="scope">
+                 {{ scope.row.user_name == null? '暂无' :scope.row.user_name }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="order_sn" label="订单号" align="center" width="150" >
+            </el-table-column>
+            <el-table-column prop="order_price" label="订单价格" align="center" >
+            </el-table-column>
+            <el-table-column prop="order_status" label="订单状态" align="center" >
+            </el-table-column>
+
+            <el-table-column prop="collection_name" label="藏品" align="center" min-width="120" >
+              <template slot-scope="scope">
+                 {{ scope.row.collection_name == null? '暂无' :scope.row.collection_name }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="collection_year" label="年代" align="center" min-width="120" >
+              <template slot-scope="scope">
+                 {{ scope.row.collection_year == null? '暂无' :scope.row.collection_year }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="expert_name" label="鉴定专家" align="center">
+              <template slot-scope="scope">
+                 {{ scope.row.expert_name == ''? '暂无' :scope.row.expert_name }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="expert_opinion" label="鉴定结果" align="center" min-width="150">
+              <template slot-scope="scope">
+                 {{ scope.row.expert_opinion == null? '暂无' :scope.row.expert_opinion }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="内容" align="center" min-width="150">
               <template slot-scope="scope">
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="mobile" label="手机" align="center" min-width="120" >
-              <template slot-scope="scope">
-                 {{ scope.row.mobile == null? '暂无' :scope.row.mobile }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="address" label="地址" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.address == null? '暂无' :scope.row.address }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="image" label="头像" align="center"  min-width="100" height="50">
+            <el-table-column prop="image" label="图片" align="center"  min-width="100" height="50">
                <!-- 图片的显示 -->
                <template slot-scope="scope">
                   <img :src="scope.row.image"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="created_time" label="注册时间" align="center" width="200" >
+            <el-table-column prop="images" label="详情" align="center" min-width="150">
               <template slot-scope="scope">
-                 {{ scope.row.created_time == ""? '暂无' :scope.row.created_time }}
+                 {{ scope.row.images == null? '暂无' :scope.row.images }}
               </template>
             </el-table-column>
-            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
+            <el-table-column prop="created_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
-                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
-              <template slot-scope="scope">
-                <font v-if="scope.row.start_time == 0" >暂无</font>
-                <font v-else >{{scope.row.start_time}}</font>
-              </template>
-            </el-table-column>
-            <el-table-column prop="is_vip" label="会员" align="center" >
-              <template slot-scope="scope">
-                 {{ scope.row.is_vip == 0 ?'否':scope.row.is_vip == 1?'是':'' }}
+                <font v-if="scope.row.created_time == 0" >暂无</font>
+                <font v-else >{{scope.row.created_time}}</font>
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
                 <template slot-scope="scope" >
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-                    <!-- 接口删除 -->
-                    <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-					<!-- <a href="#" style="color: #00D1B2" @click="appropriateness(scope.row)"><el-button size="mini" >适当性</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="applyNum(scope.row)" ><el-button size="mini" >申请</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="allotUser(scope.row)" ><el-button size="mini" >分配</el-button></a> -->
+                    <a href="#" style="color: #00D1B2" @click="IdentifiDetail(scope.row)"><el-button size="mini" >鉴定</el-button></a>
+                    <!-- <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
         <el-pagination background layout="total,sizes,prev, pager, next,jumper" :current-page="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.pageTotal" :page-sizes="[10,20]" @size-change="handleSizeChange" @current-change="handleCurrentChange">
         </el-pagination>
-        <!-- 表格---end -->
+        <!-- 表格---end
         <!-- 编辑弹框---start -->
         <el-dialog  :title="formEditTitle" :visible.sync="dialogEdittVisible" width="700px" @close="closeDialog('formEdit')">
             <el-form :label-position="labelPosition" :label-width="labelWidth" :rules="rulesEdit" :disabled="formEditDisabled" :inline="true" ref="formEdit" :model="formEdit" class="demo-form-inline">
@@ -121,16 +119,7 @@
                 <el-form-item label="备注" prop="user_remark">
                     <el-input v-model="formEdit.user_remark" placeholder="备注"></el-input>
                 </el-form-item>
-                <el-form-item label="类型" prop="type_id">
-                  <el-select v-model="type_info.type_name"  placeholder="请选择类型"   @change="typeGet(type_info.type_name)"  >
-                      <el-option
-                      v-for="item in type_info"
-                      :key="item.type_id"
-                      :lable="item.type_name"
-                      :value="item.type_name" >
-                      </el-option>
-                  </el-select>
-                </el-form-item>
+
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -143,14 +132,14 @@
 </template>
 
 <style lang="scss">
-.clients{
+.aution{
     // 设置输入框的宽度
     .el-form-item__content {
         // width: 240px;
     }
 
 }
-.clientsBox{
+.autionBox{
   .el-table__header tr,
     .el-table__header th {
       padding: 0;
@@ -159,12 +148,12 @@
   .el-table__body tr,
     .el-table__body td {
       padding: 0;
-      height: 100px;
+      height: 80px;
   }
   .cell img{
     margin: 0;
     padding: 0;
-    height: 100px;
+    height: 80px;
     width: 100%;
   }
 }
@@ -214,11 +203,11 @@ export default {
                 pageTotal: 80,
             },
             formSearch: { //表单查询
-                mobile: '',
+                status:'2',//专家鉴定
+                order_status: '',
                 order: '',
-                keywords: '',
-
             },
+
             formEdit: { //表单编辑
                 id:'',
                 name: '',
@@ -228,9 +217,7 @@ export default {
                 user_server_people:'',
                 user_develop_people:'',
             },
-            type_info:[],//用户类型
-            user_info:[],//用户类型搜索
-            depart_info:[],//部门列表
+            auctionType_info:[],//拍卖分类列表
             rulesEdit:  {
               // user_name:[{ required: true, message: "请输入用户姓名", trigger: "blur" }]
               // ,
@@ -249,9 +236,6 @@ export default {
     },
     mounted(){
       this.onSearch();
-      // this.typeList();
-      // this.userList();
-      // this.departList();
       var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-增删改查页"
@@ -269,9 +253,9 @@ export default {
                 this.formSearch.startdate=this.formSearch.createtime[0];
                 this.formSearch.enddate=this.formSearch.createtime[1];
             }
-            let param = Object.assign({}, this.formSearch,this.pageInfo);
+            let params = Object.assign({}, this.formSearch,this.pageInfo);
             var _this = this;
-            apis.msgApi.clientList(param)
+            apis.msgApi.identifiList(params)
             .then((data)=>{
               console.log(data.data);
                 this.listLoading=false;
@@ -390,34 +374,6 @@ export default {
             });
 
         },
-        // 部门列表
-        departList() {
-          apis.msgApi.departList()
-          .then((data)=>{
-            // console.log(data)
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.depart_info = json;
-                  }
-              }
-
-          })
-          .catch((err)=>{
-            this.$message({message: '执行失败，请重试',type: "error"});
-          console.log(err)
-          });
-        },
-        departGet(val){
-          console.log(val)
-          this.depart_info.map((s, index) => {
-            if (s.depart_name === val) {
-              this.id = this.depart_info[index].id;
-              console.log(this.id);
-              this.formSearch.depart_id = this.id;
-            }
-          })
-        },
         compare(attr) {
             return function(a,b){
                 var val1 = a[attr];
@@ -425,68 +381,6 @@ export default {
                 return val1 - val2;
             }
         },
-        // 用户类型搜索
-        userList() {//初始化下拉框动态数据
-            let param = 1;
-            apis.msgApi.userTyle(param)
-            .then((data)=>{
-              // console.log(data);
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.user_info = data.data;
-                    this.user_info.sort(this.compare('order'));
-                    console.log( this.user_info.sort(this.compare('order')))
-                  }
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-            console.log(err)
-            });
-        },
-        userGet(val){
-          console.log('搜索')
-          console.log(val);
-          this.user_info.map((s, index) => {
-            if (s.type_name === val) {
-              this.type_id = this.user_info[index].type_id;
-              console.log(this.type_id);
-              this.formSearch.type_id = this.type_id;
-            }
-          })
-        },
-        // 用户类型修改
-        typeList() {//初始化下拉框动态数据
-            let param = 1;
-            apis.msgApi.userTyle(param)
-            .then((data)=>{
-              console.log(data);
-                if(data&&data.data){
-                    var json=data.data;
-                    if(json&&data.status==200){
-                      this.type_info = data.data;
-                    }
-                }
-
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-            console.log(err)
-            });
-        },
-        typeGet(val){
-          console.log('修改')
-          console.log(val);
-          this.type_info.map((s, index) => {
-            if (s.type_name === val) {
-              this.type_id = this.type_info[index].type_id;
-              console.log(this.type_id);
-              this.formEdit.type_id = this.type_id;
-            }
-          })
-        },
-
         handleSave(){
             if(this.dialogType=='add'){
                 this.save();
@@ -614,14 +508,21 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        apis.msgApi.deleteBatch({ids:ids})
+                        apis.msgApi.auctionDelete({ids:ids})
                         .then((data)=>{
-                            this.$common.isSuccess(data,()=>{
-                                this.onSearch();
-                            });
+                          console.log(data)
+                          if(data.data == "5001"){
+                             this.$message({message: '用户不存在',type: "error"});
+                          }else if(data.data == 1){
+                            // this.$common.isSuccess(data,()=>{
+                              this.$message({message: '执行成功',type: "success"});
+                              this.onSearch();
+                            // });
+
+                          }
+
                         })
                         .catch((err)=>{
-                            debugger;
                             this.$message({message: '执行失败，请重试',type: "error"});
                         });
 
@@ -652,7 +553,6 @@ export default {
          */
         handleEdit(index, rowData) {
           console.log(rowData)
-              this.type_info.type_name = rowData.type_id;
             //var msg = "索引是:" + index + ",行内容是:" + JSON.stringify(rowData);
             //this.$message({message: msg,type: "success"});
             this.dialogEdittVisible = true;//等dom渲染完，读取data中初始值，然后再复制，这样重置的是data中初始值
@@ -661,13 +561,7 @@ export default {
                 this.formEditTitle='编辑';
                 this.formEditDisabled=false;
                 this.formEdit= Object.assign({}, rowData);
-                this.type_info.map((s, index) => {
-                  if (s.type_name === rowData.type_id) {
-                    this.type_id = this.type_info[index].type_id;
-                    console.log(this.type_id);
-                    this.formEdit.type_id = this.type_id;
-                  }
-                })
+
                 this.formEdit.gender+='';//必须转换成字符串才能回显
             });
         },
@@ -718,48 +612,8 @@ export default {
         /**
          * 打开详情页
          */
-        openDetail(row){
-            // this.$common.OpenNewPage(this,'detail',row);
-            this.$router.push({ name: 'detail', query:row})
-        },
-        // 持股==
-        holdList(row){
-            // this.$common.OpenNewPage(this,'hold_list',row);
-            this.$router.push({ name: 'hold_list', query:row})
-        },
-        // 成功
-        successList(row){
-            // this.$common.OpenNewPage(this,'success_list',row);
-            this.$router.push({ name: 'success_list', query:row})
-        },
-        // 失败
-        errorList(row){
-            // this.$common.OpenNewPage(this,'error_list',row);
-            this.$router.push({ name: 'error_list', query:row})
-        },
-        //调仓
-        wareList(row){
-            this.$router.push({ name: 'ware_list', query:row})
-        },
-        // 申请次数
-        applyNum(row){
-            this.$router.push({ name: 'apply_num', query:row})
-        },
-        // 推送数
-        pushNum(row){
-            this.$router.push({ name: 'push_num', query:row})
-        },
-        // 查看数
-        seeNum(row){
-            this.$router.push({ name: 'see_num', query:row})
-        },
-        // 分配管理
-        allotUser(row){
-            this.$router.push({ name: 'allot_user', query:row})
-        },
-        // 适当性
-        appropriateness(row){
-            this.$router.push({ name: 'approp_list', query:row})
+        IdentifiDetail(row){
+            this.$router.push({ name: 'expertIdentifi_detail', query:row})
         },
     }
 };

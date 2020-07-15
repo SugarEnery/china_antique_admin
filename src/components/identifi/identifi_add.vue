@@ -250,14 +250,15 @@ export default {
       this.$refs["form02"].validate(valid => {
         if(valid){
             let param = Object.assign({}, this.form2);
+            debugger
             apis.msgApi.auctionAdd(param)
             .then((data)=>{
               console.log(data);
                 if(data&&data.data){
                     var json=data.data;
-                     if(json&&json.code == 1){
+                     if(json&&json.error_code== 0){
                         this.$message({message: '执行成功',type: "success"});
-                        this.$router.push({ path: '/auction_list' })
+                        // this.$router.push({ path: '/auction_list' })
                         this.dialogEdittVisible = false;
                         return;
                     }

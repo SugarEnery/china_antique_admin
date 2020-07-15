@@ -115,7 +115,52 @@ export default {
       }
       return Axios.post('/napi/homeApi/auctionCreate',param);
     },
-
+    // 拍卖订单列表
+    auctionOrderList({auction_type,price_order,page,limit}){
+      var params =''
+      if(auction_type){
+          params+='auction_type='+auction_type+'&';
+      }
+      if(price_order){
+          params+='price_order='+price_order+'&';
+      }
+      if(page){
+          params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/auctionOrderList',params);
+    },
+    // 鉴定列表
+    identifiList({status,order_status,order,page,limit}){
+      var params =''
+      if(status){
+          params+='status='+status+'&';
+      }
+      if(order_status){
+          params+='order_status='+order_status+'&';
+      }
+      if(order){
+          params+='order='+order+'&';
+      }
+      if(page){
+          params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/appraisalList?'+params);
+    },
+    // 平台鉴定提交
+    platformIdentifi({id,expert_opinion,dating}){
+        var param={
+            id,
+            expert_opinion,
+            dating
+        };
+        return Axios.post('/napi/homeApi/appraisalUpdate', param);
+    },
     // 课程列表
     getList({name,wx_id,class_type}){
         var param={
