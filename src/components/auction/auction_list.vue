@@ -23,7 +23,8 @@
         <el-row class="mgb15">
             <!-- <el-button size="small" round type="primary" @click="handleAdd">新增</el-button> -->
             <el-button size="small" round type="danger" @click="deleteMany">批量删除</el-button>
-            <!-- <el-button size="small" round type="danger" @click="deleteMany">批量上线</el-button> -->
+            <el-button size="small" round type="danger" @click="onlineMany">批量上线</el-button>
+            <el-button size="small" round type="danger" @click="offlineMany">批量下线</el-button>
         </el-row>
         <!-- 操作区----end -->
         <!-- 表格---start -->
@@ -42,7 +43,7 @@
             </el-table-column>
             <el-table-column prop="status" label="状态" align="center" min-width="120" >
               <template slot-scope="scope">
-                 {{ scope.row.status == null? '暂无' :scope.row.status }}
+                {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
               </template>
             </el-table-column>
             <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
@@ -86,12 +87,11 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
                 <template slot-scope="scope" >
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+                    <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button> -->
+                    <a href="#" style="color: #00D1B2" @click="auctioninforEdit(scope.row)"><el-button size="mini" >修改</el-button></a>
                     <!-- 接口删除 -->
                     <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-					<!-- <a href="#" style="color: #00D1B2" @click="appropriateness(scope.row)"><el-button size="mini" >适当性</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="applyNum(scope.row)" ><el-button size="mini" >申请</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="allotUser(scope.row)" ><el-button size="mini" >分配</el-button></a> -->
+
                 </template>
             </el-table-column>
         </el-table>
@@ -611,9 +611,85 @@ export default {
                         apis.msgApi.auctionDelete({ids:ids})
                         .then((data)=>{
                           console.log(data)
-                          if(data.data == "5001"){
+                          if(data.data.code == "5001"){
                              this.$message({message: '用户不存在',type: "error"});
-                          }else if(data.data == 1){
+                          }else if(data.data.code == 1){
+                            // this.$common.isSuccess(data,()=>{
+                              this.$message({message: '执行成功',type: "success"});
+                              this.onSearch();
+                            // });
+
+                          }
+
+                        })
+                        .catch((err)=>{
+                            this.$message({message: '执行失败，请重试',type: "error"});
+                        });
+
+                }).catch(() => {
+                    this.$message({type: 'info',message: '已取消删除'});
+                });
+
+        },
+        /**
+         * 批量上线
+         */
+        onlineMany() {
+            var ids= this.multipleSelection.map(item => item.id);
+            var status ="1";
+            if(ids.length==0){
+                 this.$message({message: '请选择要删除的项',type: "warn"});
+                return;
+            }
+            this.$confirm('此操作将批量永久删除文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        apis.msgApi.auctionOnline({ids:ids,status:status})
+                        .then((data)=>{
+                          console.log(data)
+                          if(data.data.code == "5001"){
+                             this.$message({message: '用户不存在',type: "error"});
+                          }else if(data.data.code == 1){
+                            // this.$common.isSuccess(data,()=>{
+                              this.$message({message: '执行成功',type: "success"});
+                              this.onSearch();
+                            // });
+
+                          }
+
+                        })
+                        .catch((err)=>{
+                            this.$message({message: '执行失败，请重试',type: "error"});
+                        });
+
+                }).catch(() => {
+                    this.$message({type: 'info',message: '已取消删除'});
+                });
+
+        },
+        /**
+         * 批量下线
+         */
+        offlineMany() {
+            var ids= this.multipleSelection.map(item => item.id);
+            var status ="2";
+            if(ids.length==0){
+                 this.$message({message: '请选择要删除的项',type: "warn"});
+                return;
+            }
+            this.$confirm('此操作将批量永久删除文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                        apis.msgApi.auctionOnline({ids:ids,status:status})
+                        .then((data)=>{
+                          console.log(data)
+                          if(data.data.code == "5001"){
+                             this.$message({message: '用户不存在',type: "error"});
+                          }else if(data.data.code == 1){
                             // this.$common.isSuccess(data,()=>{
                               this.$message({message: '执行成功',type: "success"});
                               this.onSearch();
@@ -717,11 +793,10 @@ export default {
             // });
         },
         /**
-         * 打开详情页
+         * 修改详情页
          */
-        openDetail(row){
-            // this.$common.OpenNewPage(this,'detail',row);
-            this.$router.push({ name: 'detail', query:row})
+        auctioninforEdit(row){
+            this.$router.push({ name: 'auction_Edit', query:row})
         },
     }
 };

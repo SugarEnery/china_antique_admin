@@ -46,6 +46,14 @@ var routeDevList = [
       }
     },
     {
+      name: 'auction_Edit',
+      path: '/auction_Edit',
+      component: resolve => require(['@/components/auction/auction_Edit.vue'], resolve),
+      meta: {
+        title: '拍卖修改'
+      }
+    },
+    {
       name: 'order_list',
       path: '/order_list',
       component: resolve => require(['@/components/auction/order_list.vue'], resolve),
@@ -69,7 +77,6 @@ var routeDevList = [
         title: '专家鉴定列表'
       }
     },
-
 
     // {
     //   name: 'permis_rules',

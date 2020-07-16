@@ -100,6 +100,14 @@ export default {
       }
       return Axios.post('/napi/homeApi/auctionAllDelete',param);
     },
+    // 拍卖批量上线
+    auctionOnline({ids,status}){
+      var param ={
+        ids,
+        status
+      }
+      return Axios.post('/napi/homeApi/auctionOnLine',param);
+    },
     // 添加拍卖
     auctionAdd({name,image,status,auction_type,starting_price,markup_range,images,start_time,end_time,}){
       var param ={
@@ -114,6 +122,22 @@ export default {
         end_time
       }
       return Axios.post('/napi/homeApi/auctionCreate',param);
+    },
+    // 拍卖修改
+    auctionEdit({id,name,image,status,auction_type,starting_price,markup_range,images,start_time,end_time}){
+      var param ={
+        id,
+        name,
+        image,
+        status,
+        auction_type,
+        starting_price,
+        markup_range,
+        images,
+        start_time,
+        end_time
+      }
+      return Axios.post('/napi/homeApi/auctionUpdate',param);
     },
     // 拍卖订单列表
     auctionOrderList({auction_type,price_order,page,limit}){
