@@ -76,20 +76,20 @@ export default {
         apis.shiroApi.loginLog(loginLog);
       }
     },
-    openZanZhu(){
-      this.$common.OpenNewPage(this,'zanzhu');
-    },
-    getZanZhu(){
-      apis.mayiApi.getZanZhu().then(res=>{
-        if(res.status=="200"){
-          if(res.data.dataList){
-            this.zanzhu=res.data.dataList;
-          }
-        }
-      }).catch(
+    // openZanZhu(){
+    //   this.$common.OpenNewPage(this,'zanzhu');
+    // },
+    // getZanZhu(){
+    //   apis.mayiApi.getZanZhu().then(res=>{
+    //     if(res.status=="200"){
+    //       if(res.data.dataList){
+    //         this.zanzhu=res.data.dataList;
+    //       }
+    //     }
+    //   }).catch(
 
-      );
-    },
+    //   );
+    // },
     getDate(param){
       return this.$common.toDate(param);
     }
@@ -97,7 +97,7 @@ export default {
   mounted() {
     
     // location.reload();
-    this.getZanZhu();
+    // this.getZanZhu();
 
   },
   computed:{

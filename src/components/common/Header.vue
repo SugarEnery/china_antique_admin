@@ -79,15 +79,15 @@
             // 用户名下拉菜单选择事件
             handleCommand(command) {
                 if(command == 'loginout'){
-                    this.$common.removeSessionStorage('token');
+                    // this.$common.removeSessionStorage('token');
                     this.$router.push('/login');
                 }
-                else if(command == 'changeZh'){
-                    this.$i18n.locale = 'zh_CN';
-                }
-                else if(command == 'changeEn'){
-                    this.$i18n.locale = 'en_US';
-                }
+                // else if(command == 'changeZh'){
+                //     this.$i18n.locale = 'zh_CN';
+                // }
+                // else if(command == 'changeEn'){
+                //     this.$i18n.locale = 'en_US';
+                // }
             },
             // 侧边栏折叠
             collapseChage(){

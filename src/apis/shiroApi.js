@@ -30,7 +30,7 @@ export default {
             city:city,
             type:type
         };
-        return Axios.post('/napi/loginlog-api/save', param);
+        return Axios.post('/api/loginlog-api/save', param);
     },
     /**
      * 还原数据
