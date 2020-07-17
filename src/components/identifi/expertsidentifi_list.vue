@@ -613,7 +613,7 @@ export default {
          * 打开详情页
          */
         IdentifiDetail(row){
-            this.$router.push({ name: 'expertIdentifi_detail', query:row})
+            this.$router.push({ name: 'expertidentifi_detail', query:row})
         },
     }
 };

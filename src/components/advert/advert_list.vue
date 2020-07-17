@@ -2,20 +2,31 @@
     <div class="container aution">
         <!-- 查询区----start -->
         <el-form :label-position="labelPosition" :label-width="labelWidth" :inline="true" ref="formSearch" :model="formSearch" class="demo-form-inline">
-
-            <el-form-item label="支付状态" prop="order_status">
-               <el-select v-model="formSearch.order_status" placeholder="请选择排序">
-                  <el-option label="待支付" value="1"></el-option>
-                  <el-option label="已支付" value="2"></el-option>
+            <el-form-item label="名称" prop="keywords">
+                <el-input v-model="formSearch.keywords" placeholder="请输入名称"></el-input>
+            </el-form-item>
+            <el-form-item label="广告位置" prop="id">
+              <el-select v-model="advertTypeList_info.name"  placeholder="请选择显示位置"   @change="selectGet(advertTypeList_info.name)"  >
+                  <el-option
+                  v-for="item in advertTypeList_info"
+                  :key="item.id"
+                  :lable="item.name"
+                  :value="item.name" >
+                  </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="状态" prop="status">
+               <el-select v-model="formSearch.status" placeholder="请选择状态">
+                  <el-option label="上线" value="1"></el-option>
+                  <el-option label="下线" value="2"></el-option>
                </el-select>
             </el-form-item>
-            <el-form-item label="排序" prop="price_order">
-               <el-select v-model="formSearch.price_order" placeholder="请选择排序">
-                  <el-option label="从低到高" value="1"></el-option>
-                  <el-option label="从高到低" value="2"></el-option>
+            <el-form-item label="排序" prop="order">
+               <el-select v-model="formSearch.order" placeholder="请选择排序">
+                  <el-option label="从早到晚" value="1"></el-option>
+                  <el-option label="从晚到早" value="2"></el-option>
                </el-select>
             </el-form-item>
-
             <el-form-item label=" " style="margin-left:50px;">
                 <el-button type="primary" @click="onSearch">查询</el-button>
                 <el-button type="warning" plain @click="onReset">重置</el-button>
@@ -24,7 +35,6 @@
         <!-- 查询区----end -->
         <!-- 操作区----start -->
         <el-row class="mgb15">
-            <!-- <el-button size="small" round type="primary" @click="handleAdd">新增</el-button> -->
             <el-button size="small" round type="danger" @click="deleteMany">批量删除</el-button>
         </el-row>
         <!-- 操作区----end -->
@@ -37,57 +47,56 @@
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
                 </template> -->
             </el-table-column>
-            <el-table-column prop="user_name" label="用户" align="center" >
-              <template slot-scope="scope">
-                 {{ scope.row.user_name == null? '暂无' :scope.row.user_name }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="order_sn" label="订单号" align="center" width="150" >
-            </el-table-column>
-            <el-table-column prop="order_price" label="订单价格" align="center" >
-            </el-table-column>
-            <el-table-column prop="order_status" label="订单状态" align="center" >
-            </el-table-column>
-
-            <el-table-column prop="collection_name" label="藏品" align="center" min-width="120" >
-              <template slot-scope="scope">
-                 {{ scope.row.collection_name == null? '暂无' :scope.row.collection_name }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="dating" label="年代" align="center" min-width="120" >
-              <template slot-scope="scope">
-                 {{ scope.row.dating == null? '暂无' :scope.row.dating }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="expert_opinion" label="鉴定结果" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.expert_opinion == null? '暂无' :scope.row.expert_opinion }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="内容" align="center" min-width="150">
+            <el-table-column prop="name" label="名称" align="center" min-width="120" >
               <template slot-scope="scope">
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="image" label="图片" align="center"  min-width="100" height="50">
+            <el-table-column prop="status" label="状态" align="center" min-width="120" >
+              <template slot-scope="scope">
+                {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
+              </template>
+            </el-table-column>
+            <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
+              <template slot-scope="scope">
+                 {{ scope.row.auction_type_name == null? '暂无' :scope.row.auction_type_name }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="starting_price" label="开始价格" align="center" min-width="150">
+              <template slot-scope="scope">
+                 {{ scope.row.starting_price == null? '暂无' :scope.row.starting_price }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="markup_range" label="加价价格" align="center" min-width="150">
+              <template slot-scope="scope">
+                 {{ scope.row.markup_range == null? '暂无' :scope.row.markup_range }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="image" label="广告图" align="center"  min-width="100" >
                <!-- 图片的显示 -->
                <template slot-scope="scope">
-                 <div v-if="scope.row.image === null ">暂无</div>
-                 <div v-else-if="scope.row.image === scope.row.image">
-                   <img :src="scope.row.image"  min-width="100" />
-                 </div>
+                  <img :src="scope.row.image"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="created_time" label="开始时间" align="center" min-width="200">
+            <el-table-column prop="content" label="详情" align="center"  min-width="100" >
+            </el-table-column>
+
+            <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
-                <font v-if="scope.row.created_time == 0" >暂无</font>
-                <font v-else >{{scope.row.created_time}}</font>
+                <font v-if="scope.row.start_time == 0" >暂无</font>
+                <font v-else >{{scope.row.start_time}}</font>
+              </template>
+            </el-table-column>
+            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
+              <template slot-scope="scope">
+                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
                 <template slot-scope="scope" >
-                    <a href="#" style="color: #00D1B2" @click="IdentifiDetail(scope.row)"><el-button size="mini" >鉴定</el-button></a>
-                    <!-- <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button> -->
+                    <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button> -->
+                    <a href="#" style="color: #00D1B2" @click="advertinforEdit(scope.row)"><el-button size="mini" >修改</el-button></a>
+                    <!-- 接口删除 -->
                 </template>
             </el-table-column>
         </el-table>
@@ -103,16 +112,17 @@
                 <el-form-item label="用户姓名" prop="user_name">
                     <el-input v-model="formEdit.user_name" placeholder="用户姓名" ></el-input>
                 </el-form-item>
-                <el-form-item label="服务人员" prop="user_server_people">
-                    <el-input v-model="formEdit.user_server_people" placeholder="服务人员" ></el-input>
                 </el-form-item>
-                <el-form-item label="开发人员" prop="user_develop_people">
-                  <el-input v-model="formEdit.user_develop_people" placeholder="开发人员" ></el-input>
+                <el-form-item label="类型" prop="type_id">
+                  <el-select v-model="type_info.type_name"  placeholder="请选择类型"   @change="typeGet(type_info.type_name)"  >
+                      <el-option
+                      v-for="item in type_info"
+                      :key="item.type_id"
+                      :lable="item.type_name"
+                      :value="item.type_name" >
+                      </el-option>
+                  </el-select>
                 </el-form-item>
-                <el-form-item label="备注" prop="user_remark">
-                    <el-input v-model="formEdit.user_remark" placeholder="备注"></el-input>
-                </el-form-item>
-
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -150,34 +160,7 @@
     width: 100%;
   }
 }
-.sticky p, .floated p, .fixed p, .ondemand p{
-  float:left; padding:0px; margin:0px; margin-left:10px; line-height:45px; color:#fff; font-size:12px;}
-	.sticky a, .floated a, .fixed a, .ondemand a{ float:right; margin:13px 10px 0px 0px; }
-	img{border:0px;}
-  #sticky{
-    display: none;
-  }
-  .sticky {
 
-  	position:fixed;
-  	margin-bottom: 10px;
-  	top:7rem;
-  	right:0;
-  	z-index:1000;
-  	width:15%;
-  	background: #2D8CF0;
-  }
-  #all_num p{
-  	font-size: 16px;
-  	display: block;
-  	margin-top: 1rem;
-  }
-  #all_num p span{
-  	padding-right: 1rem;
-  	background: #2D8CF0;
-  	color: #FFFFFF;
-  	padding:.6rem .3rem;
-  }
 </style>
 
 <script>
@@ -196,11 +179,12 @@ export default {
                 pageTotal: 80,
             },
             formSearch: { //表单查询
-                status:'1',//平台鉴定
-                order_status: '',
+                status:'',
+                type:'',
                 order: '',
-            },
+                keywords: '',
 
+            },
             formEdit: { //表单编辑
                 id:'',
                 name: '',
@@ -210,7 +194,9 @@ export default {
                 user_server_people:'',
                 user_develop_people:'',
             },
-            auctionType_info:[],//拍卖分类列表
+            type_info:[],//用户类型
+            user_info:[],//用户类型搜索
+            advertTypeList_info:[],//部门列表
             rulesEdit:  {
               // user_name:[{ required: true, message: "请输入用户姓名", trigger: "blur" }]
               // ,
@@ -229,6 +215,9 @@ export default {
     },
     mounted(){
       this.onSearch();
+      this.advertTypeListApi();
+      // this.userList();
+      // this.departList();
       var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-增删改查页"
@@ -237,6 +226,38 @@ export default {
       // getSourceList.sourceApi.getSourceList(getSourceList);
     },
     methods: {
+        // 广告位置列表下拉菜单
+        advertTypeListApi() {//初始化下拉框动态数据
+            apis.msgApi.advertTypeList()
+            .then((data)=>{
+              console.log(data)
+                if(data&&data.data){
+                    var json=data.data;
+                    if(json&& json.code == 1 ){
+                      console.log(json)
+                      // var advertTypeList_info = data.data.data
+                      this.advertTypeList_info = data.data.data.ads_type_list;
+                      // 跳转位置
+                      // this.advertUrlList_info = data.data.data.ads_url_type_list;
+                    }
+                }
+
+            })
+            .catch((err)=>{
+              this.$message({message: '执行失败，请重试',type: "error"});
+            console.log(err)
+            });
+        },
+        selectGet(val){
+          console.log(val)
+          this.advertTypeList_info.map((s, index) => {
+            if (s.name === val) {
+              this.id = this.advertTypeList_info[index].id;
+              console.log(this.id);
+              this.formSearch.type = this.id;
+            }
+          })
+        },
         /**
          * 查询列表
          */
@@ -246,9 +267,9 @@ export default {
                 this.formSearch.startdate=this.formSearch.createtime[0];
                 this.formSearch.enddate=this.formSearch.createtime[1];
             }
-            let params = Object.assign({}, this.formSearch,this.pageInfo);
+            let param = Object.assign({}, this.formSearch,this.pageInfo);
             var _this = this;
-            apis.msgApi.identifiList(params)
+            apis.msgApi.advertList(param)
             .then((data)=>{
               console.log(data.data);
                 this.listLoading=false;
@@ -367,6 +388,34 @@ export default {
             });
 
         },
+        // 部门列表
+        departList() {
+          apis.msgApi.departList()
+          .then((data)=>{
+            // console.log(data)
+              if(data&&data.data){
+                  var json=data.data;
+                  if(json&&data.status==200){
+                    this.depart_info = json;
+                  }
+              }
+
+          })
+          .catch((err)=>{
+            this.$message({message: '执行失败，请重试',type: "error"});
+          console.log(err)
+          });
+        },
+        departGet(val){
+          console.log(val)
+          this.depart_info.map((s, index) => {
+            if (s.depart_name === val) {
+              this.id = this.depart_info[index].id;
+              console.log(this.id);
+              this.formSearch.depart_id = this.id;
+            }
+          })
+        },
         compare(attr) {
             return function(a,b){
                 var val1 = a[attr];
@@ -374,6 +423,68 @@ export default {
                 return val1 - val2;
             }
         },
+        // 用户类型搜索
+        userList() {//初始化下拉框动态数据
+            let param = 1;
+            apis.msgApi.userTyle(param)
+            .then((data)=>{
+              // console.log(data);
+              if(data&&data.data){
+                  var json=data.data;
+                  if(json&&data.status==200){
+                    this.user_info = data.data;
+                    this.user_info.sort(this.compare('order'));
+                    console.log( this.user_info.sort(this.compare('order')))
+                  }
+              }
+            })
+            .catch((err)=>{
+              this.$message({message: '执行失败，请重试',type: "error"});
+            console.log(err)
+            });
+        },
+        userGet(val){
+          console.log('搜索')
+          console.log(val);
+          this.user_info.map((s, index) => {
+            if (s.type_name === val) {
+              this.type_id = this.user_info[index].type_id;
+              console.log(this.type_id);
+              this.formSearch.type_id = this.type_id;
+            }
+          })
+        },
+        // 用户类型修改
+        typeList() {//初始化下拉框动态数据
+            let param = 1;
+            apis.msgApi.userTyle(param)
+            .then((data)=>{
+              console.log(data);
+                if(data&&data.data){
+                    var json=data.data;
+                    if(json&&data.status==200){
+                      this.type_info = data.data;
+                    }
+                }
+
+            })
+            .catch((err)=>{
+              this.$message({message: '执行失败，请重试',type: "error"});
+            console.log(err)
+            });
+        },
+        typeGet(val){
+          console.log('修改')
+          console.log(val);
+          this.type_info.map((s, index) => {
+            if (s.type_name === val) {
+              this.type_id = this.type_info[index].type_id;
+              console.log(this.type_id);
+              this.formEdit.type_id = this.type_id;
+            }
+          })
+        },
+
         handleSave(){
             if(this.dialogType=='add'){
                 this.save();
@@ -492,6 +603,7 @@ export default {
          */
         deleteMany() {
             var ids= this.multipleSelection.map(item => item.id);
+            console.log(ids)
             if(ids.length==0){
                  this.$message({message: '请选择要删除的项',type: "warn"});
                 return;
@@ -501,12 +613,12 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        apis.msgApi.auctionDelete({ids:ids})
+                        apis.msgApi.advertDelete({ids:ids})
                         .then((data)=>{
                           console.log(data)
-                          if(data.data == "5001"){
+                          if(data.data.code == "5001"){
                              this.$message({message: '用户不存在',type: "error"});
-                          }else if(data.data == 1){
+                          }else if(data.data.code == 1){
                             // this.$common.isSuccess(data,()=>{
                               this.$message({message: '执行成功',type: "success"});
                               this.onSearch();
@@ -546,6 +658,7 @@ export default {
          */
         handleEdit(index, rowData) {
           console.log(rowData)
+              this.type_info.type_name = rowData.type_id;
             //var msg = "索引是:" + index + ",行内容是:" + JSON.stringify(rowData);
             //this.$message({message: msg,type: "success"});
             this.dialogEdittVisible = true;//等dom渲染完，读取data中初始值，然后再复制，这样重置的是data中初始值
@@ -554,7 +667,13 @@ export default {
                 this.formEditTitle='编辑';
                 this.formEditDisabled=false;
                 this.formEdit= Object.assign({}, rowData);
-
+                this.type_info.map((s, index) => {
+                  if (s.type_name === rowData.type_id) {
+                    this.type_id = this.type_info[index].type_id;
+                    console.log(this.type_id);
+                    this.formEdit.type_id = this.type_id;
+                  }
+                })
                 this.formEdit.gender+='';//必须转换成字符串才能回显
             });
         },
@@ -603,10 +722,10 @@ export default {
             // });
         },
         /**
-         * 鉴定详情页
+         * 修改详情页
          */
-        IdentifiDetail(row){
-            this.$router.push({ name: 'platformidentifi_detail', query:row})
+        advertinforEdit(row){
+            this.$router.push({ name: 'advert_edit', query:row})
         },
     }
 };

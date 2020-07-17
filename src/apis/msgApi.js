@@ -185,6 +185,68 @@ export default {
         };
         return Axios.post('/napi/homeApi/appraisalUpdate', param);
     },
+    // 专家鉴定提交
+    expertsIdentifi({id,expert_opinion,dating}){
+        var param={
+            id,
+            expert_opinion,
+            dating
+        };
+        return Axios.post('/napi/homeApi/appraisalUpdate', param);
+    },
+    // 广告
+    // 广告位置接口 跳转位置
+    advertTypeList(param){
+      return Axios.get('/napi/homeAPi/typeList', param);
+    },
+    advertAdd({name,image,status,type,url_type,content,start_time,end_time,}){
+      var param ={
+        name,
+        image,
+        status,
+        type,
+        url_type,
+        content,
+        start_time,
+        end_time
+      }
+      return Axios.post('/napi/homeApi/adsCreate',param);
+    },
+    // 广告列表
+    advertList({status,type,order,keywords,page,limit}){
+      var params =''
+      if(status){
+          params+='status='+status+'&';
+      }
+      if(type){
+          params+='type='+type+'&';
+      }
+      if(order){
+          params+='order='+order+'&';
+      }
+      if(keywords){
+          params+='keywords='+keywords+'&';
+      }
+      if(page){
+          params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/adsList?'+params);
+    },
+    // 广告批量删除
+    advertDelete({ids}){
+      var param ={
+        ids
+      }
+      return Axios.post('/napi/homeApi/adsDelete',param);
+    },
+
+
+
+
+
     // 课程列表
     getList({name,wx_id,class_type}){
         var param={

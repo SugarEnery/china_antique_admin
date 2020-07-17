@@ -9,7 +9,7 @@
             <el-form-item label="排序" prop="order">
                <el-select v-model="formSearch.order" placeholder="请选择排序">
                   <el-option label="从早到晚" value="1"></el-option>
-                  <el-option label="从晚到早" value="1"></el-option>
+                  <el-option label="从晚到早" value="2"></el-option>
                </el-select>
             </el-form-item>
 
@@ -67,11 +67,7 @@
                   <img :src="scope.row.image"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="images" label="图片2" align="center"  min-width="100" >
-               <!-- 图片的显示 -->
-               <template slot-scope="scope">
-                  <img :src="scope.row.images"  min-width="100" />
-               </template>
+            <el-table-column prop="images" label="详情" align="center"  min-width="100" >
             </el-table-column>
 
             <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
@@ -162,35 +158,18 @@
     height: 80px;
     width: 100%;
   }
-}
-.sticky p, .floated p, .fixed p, .ondemand p{
-  float:left; padding:0px; margin:0px; margin-left:10px; line-height:45px; color:#fff; font-size:12px;}
-	.sticky a, .floated a, .fixed a, .ondemand a{ float:right; margin:13px 10px 0px 0px; }
-	img{border:0px;}
-  #sticky{
-    display: none;
-  }
-  .sticky {
+  .cell{
+    max-height: 70px !important;
+    overflow: auto !important;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
 
-  	position:fixed;
-  	margin-bottom: 10px;
-  	top:7rem;
-  	right:0;
-  	z-index:1000;
-  	width:15%;
-  	background: #2D8CF0;
   }
-  #all_num p{
-  	font-size: 16px;
-  	display: block;
-  	margin-top: 1rem;
+  .cell::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
   }
-  #all_num p span{
-  	padding-right: 1rem;
-  	background: #2D8CF0;
-  	color: #FFFFFF;
-  	padding:.6rem .3rem;
-  }
+}
+
 </style>
 
 <script>
@@ -243,9 +222,6 @@ export default {
     },
     mounted(){
       this.onSearch();
-      // this.typeList();
-      // this.userList();
-      // this.departList();
       var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-增删改查页"
@@ -796,7 +772,7 @@ export default {
          * 修改详情页
          */
         auctioninforEdit(row){
-            this.$router.push({ name: 'auction_Edit', query:row})
+            this.$router.push({ name: 'auction_edit', query:row})
         },
     }
 };

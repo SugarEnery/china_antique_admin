@@ -23,14 +23,14 @@
                 <el-button @click="exportundistributed()">导出未分配资源</el-button> -->
             </el-form-item>
             <!-- 接收到新用户在后台页面弹框提示给管理员 -->
-            <template>
+            <!-- <template>
               <div class="notification sticky hide" id="sticky">
                   <p id="content"> </p>
                   <a class="close" href="javascript:">
                     <img src="../../../static/img/close.png" class="close_img" id="close_img"/>
                     </a>
               </div>
-            </template>
+            </template> -->
 
         </el-form>
         <!-- 查询区----end -->
@@ -91,12 +91,9 @@
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
                 <template slot-scope="scope" >
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+                    <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button> -->
                     <!-- 接口删除 -->
                     <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-					<!-- <a href="#" style="color: #00D1B2" @click="appropriateness(scope.row)"><el-button size="mini" >适当性</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="applyNum(scope.row)" ><el-button size="mini" >申请</el-button></a>
-                    <a href="#" style="color: #00D1B2" @click="allotUser(scope.row)" ><el-button size="mini" >分配</el-button></a> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -168,34 +165,7 @@
     width: 100%;
   }
 }
-.sticky p, .floated p, .fixed p, .ondemand p{
-  float:left; padding:0px; margin:0px; margin-left:10px; line-height:45px; color:#fff; font-size:12px;}
-	.sticky a, .floated a, .fixed a, .ondemand a{ float:right; margin:13px 10px 0px 0px; }
-	img{border:0px;}
-  #sticky{
-    display: none;
-  }
-  .sticky {
 
-  	position:fixed;
-  	margin-bottom: 10px;
-  	top:7rem;
-  	right:0;
-  	z-index:1000;
-  	width:15%;
-  	background: #2D8CF0;
-  }
-  #all_num p{
-  	font-size: 16px;
-  	display: block;
-  	margin-top: 1rem;
-  }
-  #all_num p span{
-  	padding-right: 1rem;
-  	background: #2D8CF0;
-  	color: #FFFFFF;
-  	padding:.6rem .3rem;
-  }
 </style>
 
 <script>

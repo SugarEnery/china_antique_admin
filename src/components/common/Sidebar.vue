@@ -100,144 +100,27 @@
                                 index: 'expertsidentifi_list',
                                 title: '专家鉴定列表'
                             },
-                            
+
 
                         ]
                     },
-                    // {
-                    //     icon: 'el-icon-date',
-                    //     index: 'push',
-                    //     title: '推送管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'push_list',
-                    //             title: '群推列表'
-                    //         },
-                    //         {
-                    //             index: 'push_add',
-                    //             title: '群推添加'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-star-on',
-                    //     index: 'order',
-                    //     title: '订单管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'order_list',
-                    //             title: '订单列表'
-                    //         },
-                    //         {
-                    //             index: 'salesorder_list',
-                    //             title: '销售订单列表'
-                    //         },
-                    //         {
-                    //             index: 'order_add',
-                    //             title: '订单添加'
-                    //         },
-                    //         {
-                    //             index: 'product_list',
-                    //             title: '产品列表'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-message',
-                    //     index: 'apply',
-                    //     title: '申请管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'apply_list',
-                    //             title: '申请列表'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-message',
-                    //     index: 'article',
-                    //     title: '文章管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'article_list',
-                    //             title: '文章列表'
-                    //         },
-                    //         {
-                    //             index: 'article_add',
-                    //             title: '文章添加'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-tickets',
-                    //     index: 'falsh',
-                    //     title: '快讯管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'falsh_list',
-                    //             title: '快讯列表'
-                    //         },
-                    //         {
-                    //             index: 'falsh_add',
-                    //             title: '快讯添加'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-tickets',
-                    //     index: 'course',
-                    //     title: '课程管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'course_list',
-                    //             title: '课程列表'
-                    //         },
-                    //         {
-                    //             index: 'course_add',
-                    //             title: '课程添加'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-rank',
-                    //     index: 'complaint',
-                    //     title: '投诉管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'complaint_list',
-                    //             title: '投诉列表'
-                    //         }
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-warning',
-                    //     index: 'refund',
-                    //     title: '退款管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'refund_list',
-                    //             title: '退款列表'
-                    //         },
-                    //         {
-                    //             index: 'audit_edit',
-                    //             title: '审核结果修改'
-                    //         },
+                    {
+                        icon: 'el-icon-message',
+                        index: 'advert',
+                        title: '广告管理',
+                        subs: [
+                            {
+                                index: 'advert_list',
+                                title: '广告列表'
+                            },
+                            {
+                                index: 'advert_add',
+                                title: '广告添加'
+                            },
 
-                    //     ]
-                    // },
-                    // {
-                    //     icon: 'el-icon-star-on',
-                    //     index: 'allot',
-                    //     title: '分配管理',
-                    //     subs: [
-                    //         {
-                    //             index: 'staff_list',
-                    //             title: '员工账号列表'
-                    //         }
 
-                    //     ],
-                    //     status: '1'
-                    // },
+                        ]
+                    },
                     // {
                     //     icon: 'el-icon-setting',
                     //     index: 'system',
@@ -282,21 +165,6 @@
 
                     //     ],
                     //     status: '1'
-                    // },
-                    // {
-                    //     icon: 'el-icon-message',
-                    //     index: 'customer',
-                    //     title: '客服系统',
-                    //     subs:[
-                    //       {
-                    //           index: 'customer_list',
-                    //           title: '客服群发列表',
-                    //       },
-                    //       {
-                    //           index: 'customer_add',
-                    //           title: '客服群发添加',
-                    //       }
-                    //     ]
                     // },
                     // {
                     //     icon: 'el-icon-message',
