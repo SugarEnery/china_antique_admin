@@ -36,12 +36,13 @@
         <!-- 查询区----end -->
         <!-- 操作区----start -->
         <el-row class="mgb15">
+          <el-button size="small" round type="danger" @click="deleteMany">批量删除</el-button>
         </el-row>
         <!-- 操作区----end -->
         <!-- 表格---start -->
         <el-table :data="tableData" class="clientsBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
-            <!-- <el-table-column type="selection" width="60">
-            </el-table-column> -->
+            <el-table-column type="selection" width="60">
+            </el-table-column>
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
                 <!-- <template slot-scope="scope">
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
@@ -584,11 +585,19 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        apis.msgApi.deleteBatch({ids:ids})
+                        apis.msgApi.clientdelete({ids:ids})
                         .then((data)=>{
-                            this.$common.isSuccess(data,()=>{
-                                this.onSearch();
-                            });
+                          console.log(data)
+                          if(data.data.code == "5001"){
+                             this.$message({message: '用户不存在',type: "error"});
+                          }else if(data.data.code == 1){
+                            // this.$common.isSuccess(data,()=>{
+                              this.$message({message: '执行成功',type: "success"});
+                              this.onSearch();
+                            // });
+
+                          }
+
                         })
                         .catch((err)=>{
                             debugger;
