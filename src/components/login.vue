@@ -82,7 +82,7 @@ export default {
         return {
             passw:"password",
             formLogin: {   //表单对象
-                loginName: '',
+                loginName: '13011872222',
                 password: ''
             },
             checked: true,
@@ -115,41 +115,48 @@ export default {
                   md5.update(this.formLogin.password)
                   let password = md5.digest('hex');
                   this.formLogin.password = password;
-                  console.log(this.formLogin.password)
+                  // console.log(this.formLogin.password)
             apis.shiroApi.loginIn(this.formLogin)
                 .then((data) => {
                     console.log('success:', data);
                     var access_token = data.access_token;
                     if (data && data.data) {
                         var json = data.data;
-                        // console.log(json)
+                        console.log(json)
                         if (json.code == 1) {
                             console.log("登录成功！");
-                            var token = 'Bearer ' + json.data.token;
-                            localStorage.setItem('Authorization',token);
-                            if (this.checked == true) {
-                                console.log("checked == true");
-                                //传入账号名，密码，和保存天数3个参数
-                                this.setCookie(this.formLogin.loginName, this.formLogin.password, 7);
-                            }else {
-                              console.log("清空Cookie");
-                              //清空Cookie
-                              this.clearCookie();
-                            }
-                            this.$common.setSessionStorage('username',this.formLogin.loginName);
-                            // this.$common.setSessionStorage('username',json.data.userInfo.userName);
+                            // var token = 'Bearer ' + json.data.token;
+                            var token = json.data[0].token;
+                            var uid = json.data[0].uid;
+                            var name = json.data[0].name;
+                            // localStorage.setItem('Authorization',token);
+                            localStorage.setItem('token',token);
+                            localStorage.setItem('uid',uid);
+                            localStorage.setItem('name',name);
+
+                            // if (this.checked == true) {
+                            //     console.log("checked == true");
+                            //     //传入账号名，密码，和保存天数3个参数
+                            //     this.setCookie(this.formLogin.loginName, this.formLogin.password, 7);
+                            // }else {
+                            //   console.log("清空Cookie");
+                            //   //清空Cookie
+                            //   this.clearCookie();
+                            // }
+                            // this.$common.setSessionStorage('username',this.formLogin.loginName);
+                            this.$common.setSessionStorage('username',json.data[0].name);
                             // this.$common.setSessionStorage('lev',json.data.sysRoleVoList);
                             // 存入菜单,渲染菜单
-                            this.$store.dispatch("add_Menus",json.data.sysMenuVoList);
+                            // this.$store.dispatch("add_Menus",json.data.sysMenuVoList);
                              //动态设置路由
-                            this.$store.dispatch("add_Routes", json.data.sysMenuVoList);
+                            // this.$store.dispatch("add_Routes", json.data.sysMenuVoList);
 
                             //存储按钮权限
                             this.$store.dispatch("add_Permissions", json.data.rolePermissionVoList);
                             this.$router.replace({ path: "/index" });
                             var loginLog={
                                 ip:returnCitySN["cip"],
-                                city:returnCitySN["cname"]+'-'+json.data.userInfo.userName+'-登陆'
+                                city:returnCitySN["cname"]+'-'+json.data[0].name +'-登陆'
                             };
 
                             apis.shiroApi.loginLog(loginLog);

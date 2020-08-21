@@ -61,10 +61,23 @@ axios.interceptors.request.use(
   config => {
     console.log('>>>请求url:', config.url);
     var headers = config.headers;
-    if (localStorage.getItem("Authorization")) {
-      headers.Authorization = localStorage.getItem("Authorization");
+    if (localStorage.getItem("token")) {
+        let Base64 = require('js-base64').Base64
+        const name = Base64.encode(localStorage.getItem("name"));
+        // console.log(name)
+        headers.token = localStorage.getItem("token")
+        headers.uid = localStorage.getItem("uid")
+        headers.name = name
+      // headers.Authorization = localStorage.getItem("Authorization");
     }
-
+    // else{
+    //   console.log("失效！")
+    // }
+    //判断如果登录了就把token配置到axios的协议中
+    //     let token = localStorage.getItem("token")
+    //     if (token) {
+    //         config.headers['Authorization'] = token
+    //     }
     return config;
   },
   error => {

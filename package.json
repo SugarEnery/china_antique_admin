@@ -20,6 +20,7 @@
     "element-ui": "^2.4.5",
     "file-saver": "^2.0.2",
     "jquery": "^3.5.1",
+    "js-base64": "^3.4.5",
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.22.2",
     "socket.io-client": "^2.3.0",
