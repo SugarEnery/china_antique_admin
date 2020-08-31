@@ -82,8 +82,6 @@
                     style="width:100%;">
                   </Ueditor>
               </div>
-
-
               <el-form-item label=" ">
                   <el-button type="primary" @click="submitForm('form2')">立即创建</el-button>
               </el-form-item>
@@ -283,7 +281,8 @@ export default {
       this.$refs["form02"].validate(valid => {
         if(valid){
             let param = Object.assign({}, this.form2);
-            apis.msgApi.auctionAdd(param)
+            debugger
+            apis.msgApi.auctionEdit(param)
             .then((data)=>{
               console.log(data);
                 if(data&&data.data){
