@@ -105,6 +105,21 @@
                         ]
                     },
                     {
+                        icon: 'el-icon-tickets',
+                        index: 'infor',
+                        title: '资讯管理',
+                        subs: [
+                            {
+                                index: 'infor_list',
+                                title: '资讯列表'
+                            },
+                            {
+                                index: 'infor_add',
+                                title: '资讯添加'
+                            },
+                        ]
+                    },
+                    {
                         icon: 'el-icon-message',
                         index: 'advert',
                         title: '广告管理',

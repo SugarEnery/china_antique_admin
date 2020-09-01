@@ -32,9 +32,9 @@
             <el-table-column type="selection" width="60">
             </el-table-column>
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
-                <!-- <template slot-scope="scope">
-                    <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
-                </template> -->
+                <template slot-scope="scope">
+                    <a href="#" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
+                </template>
             </el-table-column>
             <el-table-column prop="name" label="名称" align="center" min-width="120" >
               <template slot-scope="scope">
@@ -240,7 +240,7 @@ export default {
             }
             let param = Object.assign({}, this.formSearch,this.pageInfo);
             var _this = this;
-            apis.msgApi.auctionList(param)
+            apis.msgApi.inforList(param)
             .then((data)=>{
               console.log(data.data);
                 this.listLoading=false;

@@ -117,6 +117,30 @@ var routeDevList = [
         title: '广告修改'
       }
     },
+    {
+      name: 'infor_add',
+      path: '/infor_add',
+      component: resolve => require(['@/components/infor/infor_add.vue'], resolve),
+      meta: {
+        title: '资讯添加'
+      }
+    },
+    {
+      name: 'infor_list',
+      path: '/infor_list',
+      component: resolve => require(['@/components/infor/infor_list.vue'], resolve),
+      meta: {
+        title: '资讯列表'
+      }
+    },
+    {
+      name: 'infor_edit',
+      path: '/infor_edit',
+      component: resolve => require(['@/components/infor/infor_edit.vue'], resolve),
+      meta: {
+        title: '资讯修改'
+      }
+    },
 ];
 //静态菜单
 var menuDevList = [
