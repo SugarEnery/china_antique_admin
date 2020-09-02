@@ -46,39 +46,33 @@
                 {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
               </template>
             </el-table-column>
-            <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
+            <el-table-column prop="recommend_num" label="推荐指数" align="center">
               <template slot-scope="scope">
-                 {{ scope.row.auction_type_name == null? '暂无' :scope.row.auction_type_name }}
+                <font v-if="scope.row.recommend_num == 1" >一星</font>
+                <font v-if="scope.row.recommend_num == 2" >二星</font>
+                <font v-if="scope.row.recommend_num == 3" >三星</font>
+                <font v-if="scope.row.recommend_num == 4" >四星</font>
+                <font v-if="scope.row.recommend_num == 5" >五星</font>
               </template>
             </el-table-column>
-            <el-table-column prop="starting_price" label="开始价格" align="center" min-width="150">
+            <el-table-column prop="source_name" label="来源" align="center" min-width="150">
               <template slot-scope="scope">
-                 {{ scope.row.starting_price == null? '暂无' :scope.row.starting_price }}
+                 {{ scope.row.source_name == null? '暂无' :scope.row.source_name }}
               </template>
             </el-table-column>
-            <el-table-column prop="markup_range" label="加价价格" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.markup_range == null? '暂无' :scope.row.markup_range }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="image" label="图片1" align="center"  min-width="100" >
+            <el-table-column prop="images" label="图片" align="center"  min-width="100" >
                <!-- 图片的显示 -->
                <template slot-scope="scope">
-                  <img :src="scope.row.image"  min-width="100" />
+                  <img :src="scope.row.images"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="images" label="详情" align="center"  min-width="100" >
+            <el-table-column prop="images_detail" label="详情" align="center"  min-width="100" >
             </el-table-column>
-
-            <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
-              <template slot-scope="scope">
-                <font v-if="scope.row.start_time == 0" >暂无</font>
-                <font v-else >{{scope.row.start_time}}</font>
-              </template>
+            <el-table-column prop="link" label="跳转链接" align="center" min-width="200">
             </el-table-column>
-            <el-table-column prop="end_time" label="结束时间" align="center" width="200" >
+            <el-table-column prop="dismount_time" label="时间" align="center" width="200" >
               <template slot-scope="scope">
-                 {{ scope.row.end_time == ""? '暂无' :scope.row.end_time }}
+                 {{ scope.row.dismount_time == ""? '暂无' :scope.row.dismount_time }}
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
@@ -271,7 +265,7 @@ export default {
               if(data.data.error_code == 1000){
                 this.$message({message: data.data.msg ,type: "error"});
               }else{
-                this.tableData = data.data;
+                // this.tableData = data.data;
                 setTimeout( function(){
                    let fix = document.querySelector('.el-table__fixed-right');
                     let wb;
