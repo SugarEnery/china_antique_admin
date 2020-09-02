@@ -6,55 +6,10 @@
               <el-form-item label="名称" prop="name">
                   <el-input v-model="form2.name" placeholder="名称"></el-input>
               </el-form-item>
-              <el-form-item label="拍卖状态">
-                <el-radio-group v-model="form2.status">
-                  <el-radio label="1" >上线</el-radio>
-                  <el-radio label="2" >下线</el-radio>
-                </el-radio-group>
+              <el-form-item label="鉴定费" prop="price">
+                  <el-input v-model="form2.price" placeholder="请输入鉴定费"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
               </el-form-item>
-              <el-form-item label="编号" prop="number">
-                  <el-input v-model="form2.number" placeholder="编号"></el-input>
-              </el-form-item>
-              <el-form-item label="推荐指数" prop="order">
-                 <el-select v-model="form2.recommend_num" placeholder="请选择推荐指数">
-                    <el-option label="一星" value="1"></el-option>
-                    <el-option label="二星" value="2"></el-option>
-                    <el-option label="三星" value="3"></el-option>
-                    <el-option label="四星" value="4"></el-option>
-                    <el-option label="五星" value="5"></el-option>
-                 </el-select>
-              </el-form-item>
-              <el-form-item label="来源" prop="source">
-                <el-select v-model="source_info.name"  placeholder="请选择来源"   @change="sourceGet(source_info.name)"  >
-                    <el-option
-                    v-for="item in source_info"
-                    :key="item.id"
-                    :lable="item.name"
-                    :value="item.name" >
-                    </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="拍卖分类" prop="type">
-                <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
-                    <el-option
-                    v-for="item in auctionType_info"
-                    :key="item.id"
-                    :lable="item.name"
-                    :value="item.name" >
-                    </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="链接" prop="link">
-                  <el-input v-model="form2.link" placeholder="请输入链接"></el-input>
-              </el-form-item>
-              <el-form-item label="到期时间" prop="dismount_time">
-                  <el-date-picker
-                    v-model="form2.dismount_time"
-                    type="datetime"
-                    placeholder="选择日期时间">
-                  </el-date-picker>
-              </el-form-item>
-              <el-form-item label="上传主图" prop="images">
+              <el-form-item label="专家头像" prop="image">
                 <el-upload
                   :action="form2.doUpload"
                   list-type="picture-card"
@@ -77,8 +32,8 @@
                 </el-dialog>
               </el-form-item>
 
-              <el-form-item label="主图链接" prop="images">
-                  <el-input v-model="form2.images" placeholder="主图链接"></el-input>
+              <el-form-item label="主图链接" prop="image">
+                  <el-input v-model="form2.image" placeholder="主图链接"></el-input>
               </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
@@ -136,15 +91,10 @@ export default {
       form2: {
         //表单对象
         name: "",
-        status: "",
-        images:"",
-        number:'',
-        source: "",
-        type:'',
-        recommend_num:'',
+        image:"",
+        price:'',
         link:'',
-        images_detail:"",
-        dismount_time: "",
+        content:"",
         doUpload:'/napi/homeApi/upload',
         dialogImageUrl: '',
         dialogVisible: false,
@@ -271,7 +221,7 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      this.form2.images = "http://api.chinabogu.com/"+res.data.filePath;
+      this.form2.image = "http://api.chinabogu.com/"+res.data.filePath;
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
@@ -286,7 +236,7 @@ export default {
     editorReady(instance) {
         instance.setContent(this.form.content);
         instance.addListener('contentChange', () => {
-            this.form2.images_detail = instance.getContent();
+            this.form2.content = instance.getContent();
         });
     },
     //表单提交
@@ -294,14 +244,14 @@ export default {
       this.$refs["form02"].validate(valid => {
         if(valid){
             let param = Object.assign({}, this.form2);
-            apis.msgApi.inforAdd(param)
+            apis.msgApi.expertsAdd(param)
             .then((data)=>{
               console.log(data);
                 if(data&&data.data){
                     var json=data.data;
                      if(json&&json.code == 1){
                         this.$message({message: '执行成功',type: "success"});
-                        this.$router.push({ path: '/infor_list' })
+                        this.$router.push({ path: '/experts_list' })
                         this.dialogEdittVisible = false;
                         return;
                     }

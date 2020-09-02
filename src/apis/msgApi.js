@@ -330,4 +330,39 @@ export default {
       }
       return Axios.post('/napi/homeApi/realtimeInfoAllDelete',param);
     },
+    // 专家管理
+    // 专家列表
+    expertsList({keywords,page,limit}){
+      var params =''
+      if(keywords){
+          params+='keywords='+keywords+'&';
+      }
+      if(page){
+          params+='page='+page+'&';
+      }
+      if(limit){
+          params+='limit='+limit+'&';
+      }
+      return Axios.get('/napi/homeApi/getExpertList?'+params);
+    },
+    // 专家添加
+    expertsAdd({name,image,price,content}){
+      var param ={
+        name,
+        image,
+        price,
+        content,
+      }
+      return Axios.post('/napi/homeApi/expertCreate',param);
+    },
+    // 专家修改
+
+    // 专家删除
+    expertsDelete({ids}){
+      var param ={
+        ids
+      }
+      return Axios.post('/napi/homeApi/deletionDeleteAll',param);
+    },
+
 }

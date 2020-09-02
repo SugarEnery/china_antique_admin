@@ -41,38 +41,25 @@
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态" align="center" min-width="120" >
+            <el-table-column prop="type" label="类型" align="center" min-width="120" >
               <template slot-scope="scope">
                 {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
               </template>
             </el-table-column>
-            <el-table-column prop="recommend_num" label="推荐指数" align="center">
-              <template slot-scope="scope">
-                <font v-if="scope.row.recommend_num == 1" >一星</font>
-                <font v-if="scope.row.recommend_num == 2" >二星</font>
-                <font v-if="scope.row.recommend_num == 3" >三星</font>
-                <font v-if="scope.row.recommend_num == 4" >四星</font>
-                <font v-if="scope.row.recommend_num == 5" >五星</font>
-              </template>
+            <el-table-column prop="tag" label="标签" align="center" min-width="150">
             </el-table-column>
-            <el-table-column prop="source_name" label="来源" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.source_name == null? '暂无' :scope.row.source_name }}
-              </template>
+            <el-table-column prop="price" label="价格" align="center" min-width="200">
             </el-table-column>
-            <el-table-column prop="images" label="图片" align="center"  min-width="100" >
+            <el-table-column prop="image" label="图片" align="center"  min-width="100" >
                <!-- 图片的显示 -->
                <template slot-scope="scope">
-                  <img :src="scope.row.images"  min-width="100" />
+                  <img :src="scope.row.image"  min-width="100" />
                </template>
             </el-table-column>
-            <el-table-column prop="images_detail" label="详情" align="center"  min-width="100" >
-            </el-table-column>
-            <el-table-column prop="link" label="跳转链接" align="center" min-width="200">
-            </el-table-column>
-            <el-table-column prop="dismount_time" label="时间" align="center" width="200" >
+
+            <el-table-column prop="created_time" label="创建时间" align="center" width="200" >
               <template slot-scope="scope">
-                 {{ scope.row.dismount_time == ""? '暂无' :scope.row.dismount_time }}
+                 {{ scope.row.created_time == ""? '暂无' :scope.row.created_time }}
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" min-width="230">
@@ -234,7 +221,7 @@ export default {
             }
             let params = Object.assign({}, this.formSearch,this.pageInfo);
             var _this = this;
-            apis.msgApi.inforList(params)
+            apis.msgApi.expertsList(params)
             .then((data)=>{
               console.log(data.data);
                 this.listLoading=false;
@@ -541,7 +528,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                    apis.msgApi.inforDelete({ids:id})
+                    apis.msgApi.expertsDelete({ids:id})
                     .then((data)=>{
                       console.log(data);
                       if( data.data.code == 1){
@@ -577,7 +564,7 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                        apis.msgApi.inforDelete({ids:ids})
+                        apis.msgApi.expertsDelete({ids:ids})
                         .then((data)=>{
                           console.log(data)
                           if(data.data.code == "5001"){

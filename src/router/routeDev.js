@@ -141,6 +141,30 @@ var routeDevList = [
         title: '资讯修改'
       }
     },
+    {
+      name: 'experts_add',
+      path: '/experts_add',
+      component: resolve => require(['@/components/experts/experts_add.vue'], resolve),
+      meta: {
+        title: '专家添加'
+      }
+    },
+    {
+      name: 'experts_list',
+      path: '/experts_list',
+      component: resolve => require(['@/components/experts/experts_list.vue'], resolve),
+      meta: {
+        title: '专家列表'
+      }
+    },
+    {
+      name: 'experts_edit',
+      path: '/experts_edit',
+      component: resolve => require(['@/components/experts/experts_edit.vue'], resolve),
+      meta: {
+        title: '专家修改'
+      }
+    },
 ];
 //静态菜单
 var menuDevList = [

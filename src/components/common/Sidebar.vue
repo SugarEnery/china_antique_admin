@@ -105,6 +105,23 @@
                         ]
                     },
                     {
+                        icon: 'el-icon-star-on',
+                        index: 'experts',
+                        title: '专家管理',
+                        subs: [
+                            {
+                                index: 'experts_list',
+                                title: '专家列表'
+                            },
+                            {
+                                index: 'experts_add',
+                                title: '专家添加'
+                            },
+
+
+                        ]
+                    },
+                    {
                         icon: 'el-icon-tickets',
                         index: 'infor',
                         title: '资讯管理',
