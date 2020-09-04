@@ -765,7 +765,7 @@ export default {
          * 修改详情页
          */
         auctioninforEdit(row){
-            this.$router.push({ name: 'auction_edit', query:row})
+            this.$router.push({ name: 'infor_edit', query:row})
         },
     }
 };

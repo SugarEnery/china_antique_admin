@@ -16,5 +16,4 @@ export default {
     /**消息接口 */
     msgApi:msgApi,
     /**其他接口 */
-    // sourceApi:sourceApi
 }

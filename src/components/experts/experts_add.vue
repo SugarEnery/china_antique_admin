@@ -6,6 +6,16 @@
               <el-form-item label="名称" prop="name">
                   <el-input v-model="form2.name" placeholder="名称"></el-input>
               </el-form-item>
+              <el-form-item label="分类" prop="type">
+                <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
+                    <el-option
+                    v-for="item in auctionType_info"
+                    :key="item.id"
+                    :lable="item.name"
+                    :value="item.name" >
+                    </el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="鉴定费" prop="price">
                   <el-input v-model="form2.price" placeholder="请输入鉴定费"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
               </el-form-item>
@@ -95,6 +105,7 @@ export default {
         price:'',
         link:'',
         content:"",
+        type:'',
         doUpload:'/napi/homeApi/upload',
         dialogImageUrl: '',
         dialogVisible: false,

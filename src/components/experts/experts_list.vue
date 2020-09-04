@@ -48,6 +48,8 @@
             </el-table-column>
             <el-table-column prop="tag" label="标签" align="center" min-width="150">
             </el-table-column>
+            <el-table-column prop="content" label="介绍" align="center" min-width="150">
+            </el-table-column>
             <el-table-column prop="price" label="价格" align="center" min-width="200">
             </el-table-column>
             <el-table-column prop="image" label="图片" align="center"  min-width="100" >
@@ -752,7 +754,7 @@ export default {
          * 修改详情页
          */
         auctioninforEdit(row){
-            this.$router.push({ name: 'auction_edit', query:row})
+            this.$router.push({ name: 'experts_edit', query:row})
         },
     }
 };

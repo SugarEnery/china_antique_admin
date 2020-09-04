@@ -88,7 +88,7 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-star-on',
+                        icon: 'el-icon-rank',
                         index: 'identifi',
                         title: '鉴定管理',
                         subs: [

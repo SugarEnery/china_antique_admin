@@ -6,43 +6,6 @@ import Axios from "axios";
 // var name
 // name=localStorage.getItem("name");
 export default {
-   //  add:function({name,city,type,age,gender,qq,text}){
-   //       var param={
-   //          name:name,
-   //          city:city,
-   //          type:type,
-   //          age:age,
-   //          gender:gender,
-   //          text:text,
-   //          qq:qq
-   //      };
-   //      return Axios.post('/api/msg-api/add', param);
-   //  },
-   //  update:function({id,name,city,type,age,gender,qq,text}){
-   //      var param={
-   //          id:id,
-   //         name:name,
-   //         city:city,
-   //         type:type,
-   //         age:age,
-   //         gender:gender,
-   //         text:text,
-   //         qq:qq
-   //     };
-   //     return Axios.post('/api/msg-api/update', param);
-   // },
-   // delete:function({id}){
-   //      var param={
-   //          id:id
-   //      };
-   //      return Axios.post('/api/msg-api/delete', param);
-   //  },
-   //  deleteBatch:function({ids}){
-   //      var param={
-   //          ids:ids
-   //      };
-   //      return Axios.post('/api/msg-api/deleteBatch', param);
-   //  },
     // 客户管理
     // 客户列表/
     clientList({mobile,order,keywords,page,limit}){
@@ -346,17 +309,28 @@ export default {
       return Axios.get('/napi/homeApi/getExpertList?'+params);
     },
     // 专家添加
-    expertsAdd({name,image,price,content}){
+    expertsAdd({name,image,price,content,type}){
       var param ={
         name,
         image,
         price,
         content,
+        type
       }
       return Axios.post('/napi/homeApi/expertCreate',param);
     },
     // 专家修改
-
+    expertsEdit({name,image,price,content,id,type}){
+      var param ={
+        name,
+        image,
+        price,
+        content,
+        id,
+        type
+      }
+      return Axios.post('/napi/homeApi/deletionInfoUpdate',param);
+    },
     // 专家删除
     expertsDelete({ids}){
       var param ={
@@ -364,5 +338,18 @@ export default {
       }
       return Axios.post('/napi/homeApi/deletionDeleteAll',param);
     },
-
+    // 上传图片
+    imgUpload({param}){
+      // var param
+      return Axios.post('/napi/homeApi/upload',param);
+    },
+    // 添加物流信息
+    orderInfoAdd({auction_id,order_sn,express_name}){
+      var param ={
+        auction_id,
+        order_sn,
+        express_name,
+      }
+      return Axios.post('/napi/homeApi/addOrderInfoCreate',param);
+    },
 }

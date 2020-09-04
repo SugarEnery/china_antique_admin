@@ -34,8 +34,8 @@
         <!-- 操作区----end -->
         <!-- 表格---start -->
         <el-table :data="tableData" class="autionBox" v-loading="listLoading"  border stripe style="width: 100%;" @selection-change="handleSelectionChange" id="out-table">
-            <el-table-column type="selection" width="60">
-            </el-table-column>
+            <!-- <el-table-column type="selection" width="60">
+            </el-table-column> -->
             <el-table-column prop="id" label="id" width="100" align="center" sortable>
                 <!-- <template slot-scope="scope">
                     <a href="javacript:;" style="color: #00D1B2" @click="openDetail(scope.row)">{{ scope.row.id}}</a>
@@ -46,9 +46,9 @@
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="price" label="价格" align="center" min-width="120" >
+            <el-table-column prop="end_price" label="成交价" align="center" min-width="120" >
               <template slot-scope="scope">
-                 {{ scope.row.price == null? '暂无' :scope.row.price }}
+                 {{ scope.row.end_price == null? '暂无' :scope.row.end_price }}
               </template>
             </el-table-column>
             <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
@@ -56,15 +56,14 @@
                  {{ scope.row.auction_type_name == ''? '暂无' :scope.row.auction_type_name }}
               </template>
             </el-table-column>
-            <el-table-column prop="order_sn" label="订单" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.order_sn == null? '暂无' :scope.row.order_sn }}
-              </template>
-            </el-table-column>
             <el-table-column prop="order_status" label="订单状态" align="center" min-width="150">
               <template slot-scope="scope">
                  {{ scope.row.order_status == null? '暂无' :scope.row.order_status }}
               </template>
+            </el-table-column>
+            <el-table-column prop="express_name" label="物流公司" align="center" min-width="150">
+            </el-table-column>
+            <el-table-column prop="express_order_sn" label="订单" align="center" min-width="150">
             </el-table-column>
             <el-table-column prop="created_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
@@ -77,12 +76,12 @@
                  {{ scope.row.effective_time == ""? '暂无' :scope.row.effective_time }}
               </template>
             </el-table-column>
-            <!-- <el-table-column label="操作" fixed="right" min-width="230">
+            <el-table-column label="操作" fixed="right" min-width="230">
                 <template slot-scope="scope" >
-                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">单号</el-button>
                     <el-button size="mini" plain type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
-            </el-table-column> -->
+            </el-table-column>
         </el-table>
         <el-pagination background layout="total,sizes,prev, pager, next,jumper" :current-page="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.pageTotal" :page-sizes="[10,20]" @size-change="handleSizeChange" @current-change="handleCurrentChange">
         </el-pagination>
@@ -90,30 +89,14 @@
         <!-- 编辑弹框---start -->
         <el-dialog  :title="formEditTitle" :visible.sync="dialogEdittVisible" width="700px" @close="closeDialog('formEdit')">
             <el-form :label-position="labelPosition" :label-width="labelWidth" :rules="rulesEdit" :disabled="formEditDisabled" :inline="true" ref="formEdit" :model="formEdit" class="demo-form-inline">
-                 <el-form-item label="id" prop="id">
-                    <el-input v-model="formEdit.id" placeholder="ID" disabled=""></el-input>
+                 <el-form-item label="ID" prop="auction_id">
+                    <el-input v-model="formEdit.auction_id" placeholder="ID" disabled=""></el-input>
                 </el-form-item>
-                <el-form-item label="用户姓名" prop="user_name">
-                    <el-input v-model="formEdit.user_name" placeholder="用户姓名" ></el-input>
+                <el-form-item label="订单号" prop="order_sn">
+                    <el-input v-model="formEdit.order_sn" placeholder="订单号" ></el-input>
                 </el-form-item>
-                <el-form-item label="服务人员" prop="user_server_people">
-                    <el-input v-model="formEdit.user_server_people" placeholder="服务人员" ></el-input>
-                </el-form-item>
-                <el-form-item label="开发人员" prop="user_develop_people">
-                  <el-input v-model="formEdit.user_develop_people" placeholder="开发人员" ></el-input>
-                </el-form-item>
-                <el-form-item label="备注" prop="user_remark">
-                    <el-input v-model="formEdit.user_remark" placeholder="备注"></el-input>
-                </el-form-item>
-                <el-form-item label="类型" prop="type_id">
-                  <el-select v-model="type_info.type_name"  placeholder="请选择类型"   @change="typeGet(type_info.type_name)"  >
-                      <el-option
-                      v-for="item in type_info"
-                      :key="item.type_id"
-                      :lable="item.type_name"
-                      :value="item.type_name" >
-                      </el-option>
-                  </el-select>
+                <el-form-item label="物流公司" prop="express_name">
+                  <el-input v-model="formEdit.express_name" placeholder="物流公司名称" ></el-input>
                 </el-form-item>
             </el-form>
 
@@ -201,24 +184,18 @@ export default {
                 price_order: '',
                 auction_type: '',
             },
-
             formEdit: { //表单编辑
-                id:'',
-                name: '',
+                auction_id:'',
+                order_sn: '',
                 type_id:'',
-                user_remark:'',
-                user_name:'',
-                user_server_people:'',
-                user_develop_people:'',
+                express_name:'',
             },
             auctionType_info:[],//拍卖分类列表
             type_info:[],//用户类型
             user_info:[],//用户类型搜索
             depart_info:[],//部门列表
             rulesEdit:  {
-              // user_name:[{ required: true, message: "请输入用户姓名", trigger: "blur" }]
-              // ,
-              type_id: [{ required: true, message: "请选择用户类型", trigger: "change" }],
+              type_id: [{ required: true, message: "请输入订单号", trigger: "change" }],
             },
             formEditTitle:'编辑',//新增，编辑和查看标题
             formEditDisabled:false,//编辑弹窗是否可编辑
@@ -248,7 +225,7 @@ export default {
       auctionTypeListApi() {//初始化下拉框动态数据
           apis.msgApi.auctionTypeList()
           .then((data)=>{
-            console.log(data)
+            // console.log(data)
               if(data&&data.data){
                   var json=data.data;
                   if(json&& json.code == 1 ){
@@ -305,133 +282,6 @@ export default {
                 this.listLoading=false;
                 this.$message({message: '查询异常，请重试',type: "error"});
             });
-        },
-        // 选择用户类型导出用户
-        exportExcel () {
-            this.listLoading=true;
-            let params = Object.assign({}, this.formSearch,this.pageInfo);
-            apis.msgApi.clientLead(params)
-            .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-                    }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '客户列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
-            });
-
-        },
-        // 导出未分配资源用户
-        exportundistributed () {
-            this.listLoading=true;
-            apis.msgApi.unclientLead()
-            .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-                    }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '未分配资源列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
-            });
-
-        },
-        // 部门列表
-        departList() {
-          apis.msgApi.departList()
-          .then((data)=>{
-            // console.log(data)
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.depart_info = json;
-                  }
-              }
-
-          })
-          .catch((err)=>{
-            this.$message({message: '执行失败，请重试',type: "error"});
-          console.log(err)
-          });
-        },
-        departGet(val){
-          console.log(val)
-          this.depart_info.map((s, index) => {
-            if (s.depart_name === val) {
-              this.id = this.depart_info[index].id;
-              console.log(this.id);
-              this.formSearch.depart_id = this.id;
-            }
-          })
         },
         compare(attr) {
             return function(a,b){
@@ -548,31 +398,27 @@ export default {
             this.$refs["formEdit"].validate(valid => {
                 if(valid){
                     let param = Object.assign({}, this.formEdit);
-                    apis.msgApi.clientEdit(param)
+                    // 添加物流信息接口
+                    apis.msgApi.orderInfoAdd(param)
                     .then((data)=>{
                       console.log(data);
                         if(data&&data.data){
                             var json=data.data;
-                            if(json&&data.status== 200 ){
-                              if( data.data.error_code == 1000 ){
-                                // 、用户姓名！
-                                  this.$message({message: data.data.msg,type: "error"});
-                              }else{
-                                  this.$message({message: '执行成功',type: "success"});
-                                  this.dialogEdittVisible = false;
-                                  this.onSearch();
-                                  return;
-                              }
+                            if(json&&json.code== 1 ){
+                              this.$message({message: '执行成功',type: "success"});
+                              this.dialogEdittVisible = false;
+                              this.onSearch();
+                              return;
+                            }else{
+                              this.$message({message: json.msg,type: "error"});
                             }
                         }
-                       // this.$message({message: '执行失败，请重试',type: "error"});
                     })
                     .catch((err)=>{
                       console.log(err);
                         // this.$message({message: '执行失败，请重试',type: "error"});
                     });
                 }
-
 
             });
         },
@@ -673,24 +519,22 @@ export default {
          * 打开编辑弹窗
          */
         handleEdit(index, rowData) {
-          console.log(rowData)
-              this.type_info.type_name = rowData.type_id;
-            //var msg = "索引是:" + index + ",行内容是:" + JSON.stringify(rowData);
-            //this.$message({message: msg,type: "success"});
+            // console.log(rowData)
+            // var msg = "索引是:" + index + ",行内容是:" + JSON.stringify(rowData);
+            // this.$message({message: msg,type: "success"});
             this.dialogEdittVisible = true;//等dom渲染完，读取data中初始值，然后再复制，这样重置的是data中初始值
             this.$nextTick(()=>{
                 this.dialogType='edit';
                 this.formEditTitle='编辑';
                 this.formEditDisabled=false;
-                this.formEdit= Object.assign({}, rowData);
-                this.type_info.map((s, index) => {
-                  if (s.type_name === rowData.type_id) {
-                    this.type_id = this.type_info[index].type_id;
-                    console.log(this.type_id);
-                    this.formEdit.type_id = this.type_id;
-                  }
-                })
+                // this.formEdit= Object.assign({}, rowData);
                 this.formEdit.gender+='';//必须转换成字符串才能回显
+                this.formEdit.auction_id = rowData.id;
+                if(rowData.express_order_sn != "暂无"){
+                  this.formEdit.order_sn = rowData.express_order_sn;
+                  this.formEdit.express_name = rowData.express_name;
+                }
+
             });
         },
         /**

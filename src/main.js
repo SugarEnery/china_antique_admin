@@ -21,8 +21,6 @@ Vue.component('Ueditor',Ueditor)
 
 // import 'element-ui/lib/theme-chalk/index.css';
 // import '../static/css/theme-green/index.css';
-
-
 //引入多语言支持
 import i18n from './common/i18n'
 
@@ -36,7 +34,7 @@ Vue.use(Vuex);
 // Vue.use(CKEditor);
 
 import permission from './directive'
-process.env.MOCK && require('@/apimock')
+// process.env.MOCK && require('@/apimock')
 
 /* eslint-disable no-new */
 new Vue({

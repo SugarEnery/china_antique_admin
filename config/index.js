@@ -6,7 +6,6 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -60,25 +59,6 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-
-    // proxyTable: {
-    //   '/api': {
-    //     target: 'http://101ycy.com:10001',
-    //     //target: 'http://localhost:8070',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': '/'
-    //     }
-    //   },
-    //   '/napi': {
-    //     target: 'http://api.chinabogu.com',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/napi': '/'
-    //     }
-    //   }
-    // },
-
 
     /**
      * Source Maps

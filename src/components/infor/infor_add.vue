@@ -34,7 +34,7 @@
                     </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="拍卖分类" prop="type">
+              <el-form-item label="分类" prop="type">
                 <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
                     <el-option
                     v-for="item in auctionType_info"
@@ -55,6 +55,7 @@
                   </el-date-picker>
               </el-form-item>
               <el-form-item label="上传主图" prop="images">
+                <!-- form2.doUpload noAction :http-request="fileRequestBackId":show-file-list="false"-->
                 <el-upload
                   :action="form2.doUpload"
                   list-type="picture-card"
@@ -75,10 +76,6 @@
                 <el-dialog :visible.sync="form2.dialogVisible">
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
-              </el-form-item>
-
-              <el-form-item label="主图链接" prop="images">
-                  <el-input v-model="form2.images" placeholder="主图链接"></el-input>
               </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
@@ -250,6 +247,23 @@ export default {
       })
 
     },
+    fileRequestBackId(res, file){
+      console.log(res);
+      console.log(res.file);
+      var param = new FormData();
+      param.append('file',res.file);
+      // console.log(FormData.get('file'))
+      debugger
+      apis.msgApi.imgUpload(param)
+      .then((data)=>{
+        console.log(data)
+
+      })
+      .catch((err)=>{
+        this.$message({message: '执行失败，请重试',type: "error"});
+      console.log(err)
+      });
+    },
     handleRemove(file, fileList) {//移除图片
       console.log(file, fileList);
     },
@@ -276,7 +290,7 @@ export default {
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
       this.$message.error('上传图片不能超过6张!');
-      console.log(file, fileList);
+      // console.log(file, fileList);
     },
     imgUploadError(err, file, fileList){//图片上传失败调用
       console.log(err)

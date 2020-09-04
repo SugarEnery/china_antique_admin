@@ -7,7 +7,12 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "build:report": "npm_config_report=true node build/build.js",
+    "lint": "eslint --ext .js,.vue src",
+    "build--test": "cross-env NODE_ENV=testing env_config=test node build/build.js",
+    "build--prod": "cross-env NODE_ENV=production env_config=prod node build/build.js"
+
   },
   "dependencies": {
     "@ckeditor/ckeditor5-adapter-ckfinder": "^18.0.0",

@@ -1,12 +1,9 @@
 <template >
     <div>
+      <!-- {{personInfo}} -->
         <!-- 查询区----start -->
-        <!-- {{personInfo}} -->
         <div class="container form02">
             <el-form :label-position="labelPosition" :rules="rules" ref="form02" :label-width="labelWidth" :inline="false" :model="form2" class="demo-form-inline">
-              <el-form-item label="id" prop="id">
-                  <el-input v-model="form2.id" placeholder="id"></el-input>
-              </el-form-item>
               <el-form-item label="名称" prop="name">
                   <el-input v-model="form2.name" placeholder="名称"></el-input>
               </el-form-item>
@@ -16,16 +13,27 @@
                   <el-radio label="2" >下线</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="起拍价" prop="starting_price">
-                  <el-input v-model="form2.starting_price" placeholder="起拍价" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
-></el-input>
+              <el-form-item label="推荐指数" prop="order">
+                 <el-select v-model="form2.recommend_num" placeholder="请选择推荐指数">
+                    <el-option label="一星" value="1"></el-option>
+                    <el-option label="二星" value="2"></el-option>
+                    <el-option label="三星" value="3"></el-option>
+                    <el-option label="四星" value="4"></el-option>
+                    <el-option label="五星" value="5"></el-option>
+                 </el-select>
               </el-form-item>
-              <el-form-item label="加价幅度" prop="markup_range">
-                  <el-input v-model="form2.markup_range" placeholder="加价幅度" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
- ></el-input>
+              <el-form-item label="来源" prop="source">
+                <el-select v-model="source_info.name"  placeholder="请选择来源"   @change="sourceGet(source_info.name)"  >
+                    <el-option
+                    v-for="item in source_info"
+                    :key="item.id"
+                    :lable="item.name"
+                    :value="item.name" >
+                    </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item label="拍卖分类" prop="auction_type">
-                <el-select v-model="auctionType_info.name"  placeholder="请选择分类"  @click.native="auctionTypeListApi()"  @change="selectGet(auctionType_info.name)"  >
+              <el-form-item label="分类" prop="type">
+                <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
                     <el-option
                     v-for="item in auctionType_info"
                     :key="item.id"
@@ -34,21 +42,20 @@
                     </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="开始拍卖时间" prop="start_time">
+              <el-form-item label="链接" prop="link">
+                  <el-input v-model="form2.link" placeholder="请输入链接"></el-input>
+              </el-form-item>
+              <el-form-item label="到期时间" prop="dismount_time">
                   <el-date-picker
-                    v-model="form2.start_time"
+                    v-model="form2.dismount_time"
                     type="datetime"
                     placeholder="选择日期时间">
                   </el-date-picker>
               </el-form-item>
-              <el-form-item label="结束拍卖时间" prop="end_time">
-                  <el-date-picker
-                    v-model="form2.end_time"
-                    type="datetime"
-                    placeholder="选择日期时间">
-                  </el-date-picker>
+              <el-form-item label="主图" prop="images">
+                  <img :src="form2.images" width="100" height="100"/>
               </el-form-item>
-              <el-form-item label="上传主图" prop="image">
+              <el-form-item label="上传主图" prop="images">
                 <el-upload
                   :action="form2.doUpload"
                   list-type="picture-card"
@@ -70,10 +77,6 @@
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-
-              <el-form-item label="主图链接" prop="image">
-                  <el-input v-model="form2.image" placeholder="主图链接"></el-input>
-              </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
                     ref="ue"
@@ -82,6 +85,8 @@
                     style="width:100%;">
                   </Ueditor>
               </div>
+
+
               <el-form-item label=" ">
                   <el-button type="primary" @click="submitForm('form2')">立即创建</el-button>
               </el-form-item>
@@ -128,16 +133,16 @@ export default {
       personInfo:this.$route.query,
       form2: {
         //表单对象
-        id:'',
         name: "",
-        auction_type: "",
         status: "",
-        starting_price:"",
-        start_time:'',
-        end_time:"",
-        markup_range: "",
-        image:"",
-        images: "",
+        images:"",
+        number:'',
+        source: "",
+        type:'',
+        recommend_num:'',
+        link:'',
+        images_detail:"",
+        dismount_time: "",
         doUpload:'/napi/homeApi/upload',
         dialogImageUrl: '',
         dialogVisible: false,
@@ -154,6 +159,7 @@ export default {
       },
       orderprice:[],
       auctionType_info:[],//拍卖分类列表
+      source_info:[],//来源列表
       peoples:[],
       products:[],
       editor:null,//编辑器实例
@@ -174,7 +180,9 @@ export default {
   },
   mounted() {
     this.getParams();
-    // this.auctionTypeListApi();
+    this.auctionTypeListApi();
+    this.sourceListApi();
+
   },
   components: {
     Ueditor
@@ -184,27 +192,51 @@ export default {
         // 取到路由带过来的参数
         const routerParams = this.personInfo
         // this.mallCode = routerParams;
-        console.log(routerParams);
+        // console.log(routerParams);
         // 将数据放在当前组件的数据内
         this.form2.id = this.personInfo.id;
         this.form2.name = this.personInfo.name;
-        this.form2.image = this.personInfo.image;
-        this.form2.status = this.personInfo.status;
-        this.form2.auction_type = this.personInfo.auction_type;
-        this.form2.starting_price = this.personInfo.starting_price;
-        this.form2.markup_range = this.personInfo.markup_range;
-        this.form.content = this.personInfo.images;
         this.form2.images = this.personInfo.images;
-        this.form2.start_time = this.personInfo.start_time;
-        this.form2.end_time = this.personInfo.end_time;
-        this.auctionType_info.name = this.personInfo.auction_type_name;
+        this.form2.status = this.personInfo.status;
+        this.form2.source = this.personInfo.source;
+        this.form2.type = this.personInfo.type;
+        this.form2.recommend_num = this.personInfo.recommend_num;
+        this.form2.link = this.personInfo.link;
+        this.form2.images = this.personInfo.images;
+        this.form2.images_detail = this.personInfo.images_detail;
+        this.form.content = this.personInfo.images_detail;
+        this.form2.dismount_time = this.personInfo.dismount_time;
     },
-    editorReady(instance) {
-      console.log(instance)
-        instance.setContent(this.form.content);
-        instance.addListener('contentChange', () => {
-            this.form2.images = instance.getContent();
+    // 列表下拉菜单
+    sourceListApi() {//初始化下拉框动态数据
+        apis.msgApi.inforSourceList()
+        .then((data)=>{
+          console.log(data)
+            if(data&&data.data){
+                var json=data.data;
+                if(json&& json.code == 1 ){
+                  console.log(json)
+                  // var source_info = data.data.data
+                  this.source_info = data.data.data;
+                }
+            }
+
+        })
+        .catch((err)=>{
+          this.$message({message: '执行失败，请重试',type: "error"});
+        console.log(err)
         });
+    },
+    sourceGet(val){
+      console.log(val)
+      this.source_info.map((s, index) => {
+        if (s.name === val) {
+          this.id = this.source_info[index].id;
+          // console.log(this.id);
+          this.form2.source = this.id;
+        }
+      })
+
     },
     // 拍卖分类列表下拉菜单
     auctionTypeListApi() {//初始化下拉框动态数据
@@ -215,7 +247,7 @@ export default {
                 var json=data.data;
                 if(json&& json.code == 1 ){
                   console.log(json)
-                  var auctionType_info = data.data.data
+                  // var auctionType_info = data.data.data
                   this.auctionType_info = data.data.data;
                 }
             }
@@ -232,14 +264,14 @@ export default {
         if (s.name === val) {
           this.id = this.auctionType_info[index].id;
           console.log(this.id);
-          this.form2.auction_type = this.id;
+          this.form2.type = this.id;
         }
       })
 
     },
     handleRemove(file, fileList) {//移除图片
-            console.log(file, fileList);
-          },
+      console.log(file, fileList);
+    },
     handlePictureCardPreview(file) {//预览图片时调用
       console.log(file);
       this.dialogImageUrl = file.url;
@@ -258,7 +290,7 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      this.form2.image = "http://api.chinabogu.com/"+res.data.filePath;
+      this.form2.images = "http://api.chinabogu.com/"+res.data.filePath;
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制
@@ -273,7 +305,7 @@ export default {
     editorReady(instance) {
         instance.setContent(this.form.content);
         instance.addListener('contentChange', () => {
-            this.form2.images = instance.getContent();
+            this.form2.images_detail = instance.getContent();
         });
     },
     //表单提交
@@ -281,21 +313,19 @@ export default {
       this.$refs["form02"].validate(valid => {
         if(valid){
             let param = Object.assign({}, this.form2);
-            apis.msgApi.auctionEdit(param)
+            apis.msgApi.inforEdit(param)
             .then((data)=>{
               console.log(data);
                 if(data&&data.data){
                     var json=data.data;
                      if(json&&json.code == 1){
                         this.$message({message: '执行成功',type: "success"});
-                        this.$router.push({ path: '/auction_list' })
+                        this.$router.push({ path: '/infor_list' })
                         this.dialogEdittVisible = false;
                         return;
-                    }else{
-                      this.$message({message: json.msg,type: "error"});
                     }
                 }
-               // this.$message({message: '执行失败，请重试',type: "error"});
+               this.$message({message: '执行失败，请重试',type: "error"});
             })
             .catch((err)=>{
                 this.$message({message: '执行失败，请重试',type: "error"});
