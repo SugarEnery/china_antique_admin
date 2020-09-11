@@ -115,41 +115,25 @@ export default {
                   md5.update(this.formLogin.password)
                   let password = md5.digest('hex');
                   this.formLogin.password = password;
-                  // console.log(this.formLogin.password)
             apis.shiroApi.loginIn(this.formLogin)
                 .then((data) => {
-                    console.log('success:', data);
-                    var access_token = data.access_token;
+                    // console.log('success:', data);
+                    // var access_token = data.access_token;
                     if (data && data.data) {
                         var json = data.data;
                         console.log(json)
                         if (json.code == 1) {
                             console.log("登录成功！");
-                            // var token = 'Bearer ' + json.data.token;
+
                             var token = json.data[0].token;
                             var uid = json.data[0].uid;
                             var name = json.data[0].name;
-                            // localStorage.setItem('Authorization',token);
+                            // // localStorage.setItem('Authorization',token);
                             localStorage.setItem('token',token);
                             localStorage.setItem('uid',uid);
                             localStorage.setItem('name',name);
 
-                            // if (this.checked == true) {
-                            //     console.log("checked == true");
-                            //     //传入账号名，密码，和保存天数3个参数
-                            //     this.setCookie(this.formLogin.loginName, this.formLogin.password, 7);
-                            // }else {
-                            //   console.log("清空Cookie");
-                            //   //清空Cookie
-                            //   this.clearCookie();
-                            // }
-                            // this.$common.setSessionStorage('username',this.formLogin.loginName);
                             this.$common.setSessionStorage('username',json.data[0].name);
-                            // this.$common.setSessionStorage('lev',json.data.sysRoleVoList);
-                            // 存入菜单,渲染菜单
-                            // this.$store.dispatch("add_Menus",json.data.sysMenuVoList);
-                             //动态设置路由
-                            // this.$store.dispatch("add_Routes", json.data.sysMenuVoList);
 
                             //存储按钮权限
                             this.$store.dispatch("add_Permissions", json.data.rolePermissionVoList);
@@ -158,7 +142,6 @@ export default {
                                 ip:returnCitySN["cip"],
                                 city:returnCitySN["cname"]+'-'+json.data[0].name +'-登陆'
                             };
-
                             apis.shiroApi.loginLog(loginLog);
                             return;
                         }
@@ -171,7 +154,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                    console.log('error:', err);
+                    // console.log('error:', err);
                     // this.errorInfo.isShowError = true;
                     // this.errorInfo.text = '系统接口异常';
                 });

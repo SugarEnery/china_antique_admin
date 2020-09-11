@@ -42,8 +42,16 @@
               </template>
             </el-table-column>
             <el-table-column prop="type" label="类型" align="center" min-width="120" >
+              <!-- 遍历类型 -->
               <template slot-scope="scope">
-                {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
+                <div v-for="(item, index) in auctionType_info" :key="index" >
+                  <!-- {{ item }} -->
+                  <!-- {{index}} -->
+                  <!-- {{scope.row.name}} -->
+                  <div v-if="scope.row.name == index" >1111</div>
+                  <div v-slse-if="scope.row.name != index" >22222</div>
+
+                </div>
               </template>
             </el-table-column>
             <el-table-column prop="tag" label="标签" align="center" min-width="150">
@@ -94,18 +102,8 @@
                 <el-form-item label="备注" prop="user_remark">
                     <el-input v-model="formEdit.user_remark" placeholder="备注"></el-input>
                 </el-form-item>
-                <el-form-item label="类型" prop="type_id">
-                  <el-select v-model="type_info.type_name"  placeholder="请选择类型"   @change="typeGet(type_info.type_name)"  >
-                      <el-option
-                      v-for="item in type_info"
-                      :key="item.type_id"
-                      :lable="item.type_name"
-                      :value="item.type_name" >
-                      </el-option>
-                  </el-select>
-                </el-form-item>
-            </el-form>
 
+            </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogEdittVisible = false">取 消</el-button>
                 <el-button v-if="!formEditDisabled" type="primary" @click="handleSave">确 定</el-button>
@@ -183,9 +181,7 @@ export default {
                 user_server_people:'',
                 user_develop_people:'',
             },
-            type_info:[],//用户类型
-            user_info:[],//用户类型搜索
-            depart_info:[],//部门列表
+            auctionType_info:[],
             rulesEdit:  {
               // user_name:[{ required: true, message: "请输入用户姓名", trigger: "blur" }]
               // ,
@@ -204,6 +200,7 @@ export default {
     },
     mounted(){
       this.onSearch();
+      this.auctionTypeListApi();
       var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-增删改查页"
@@ -225,7 +222,7 @@ export default {
             var _this = this;
             apis.msgApi.expertsList(params)
             .then((data)=>{
-              console.log(data.data);
+              // console.log(data.data);
                 this.listLoading=false;
                 if (data && data.data) {
                   var json = data.data.data;
@@ -243,200 +240,40 @@ export default {
                 this.$message({message: '查询异常，请重试',type: "error"});
             });
         },
-        // 选择用户类型导出用户
-        exportExcel () {
-            this.listLoading=true;
-            let params = Object.assign({}, this.formSearch,this.pageInfo);
-            apis.msgApi.clientLead(params)
+        // 拍卖分类列表下拉菜单
+        auctionTypeListApi() {//初始化下拉框动态数据
+            apis.msgApi.auctionTypeList()
             .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                // this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
+              console.log(data)
+                if(data&&data.data){
+                    var json=data.data;
+                    if(json&& json.code == 1 ){
+                      console.log(json)
+                      this.auctionType_info = data.data.data;
                     }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '客户列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
+                }
             })
             .catch((err)=>{
               this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
+            console.log(err)
             });
-
         },
-        // 导出未分配资源用户
-        exportundistributed () {
-            this.listLoading=true;
-            apis.msgApi.unclientLead()
-            .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-                    }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '未分配资源列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
-            });
-
-        },
-        // 部门列表
-        departList() {
-          apis.msgApi.departList()
-          .then((data)=>{
-            // console.log(data)
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.depart_info = json;
-                  }
-              }
-
-          })
-          .catch((err)=>{
-            this.$message({message: '执行失败，请重试',type: "error"});
-          console.log(err)
-          });
-        },
-        departGet(val){
-          console.log(val)
-          this.depart_info.map((s, index) => {
-            if (s.depart_name === val) {
-              this.id = this.depart_info[index].id;
-              console.log(this.id);
-              this.formSearch.depart_id = this.id;
-            }
-          })
-        },
+        // selectGet(val){
+        //   console.log(val)
+        //   this.auctionType_info.map((s, index) => {
+        //     if (s.name === val) {
+        //       this.id = this.auctionType_info[index].id;
+        //       console.log(this.id);
+        //       this.form2.type = this.id;
+        //     }
+        //   })
+        // },
         compare(attr) {
             return function(a,b){
                 var val1 = a[attr];
                 var val2 = b[attr];
                 return val1 - val2;
             }
-        },
-        // 用户类型搜索
-        userList() {//初始化下拉框动态数据
-            let param = 1;
-            apis.msgApi.userTyle(param)
-            .then((data)=>{
-              // console.log(data);
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.user_info = data.data;
-                    this.user_info.sort(this.compare('order'));
-                    console.log( this.user_info.sort(this.compare('order')))
-                  }
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-            console.log(err)
-            });
-        },
-        userGet(val){
-          console.log('搜索')
-          console.log(val);
-          this.user_info.map((s, index) => {
-            if (s.type_name === val) {
-              this.type_id = this.user_info[index].type_id;
-              console.log(this.type_id);
-              this.formSearch.type_id = this.type_id;
-            }
-          })
-        },
-        // 用户类型修改
-        typeList() {//初始化下拉框动态数据
-            let param = 1;
-            apis.msgApi.userTyle(param)
-            .then((data)=>{
-              console.log(data);
-                if(data&&data.data){
-                    var json=data.data;
-                    if(json&&data.status==200){
-                      this.type_info = data.data;
-                    }
-                }
-
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-            console.log(err)
-            });
-        },
-        typeGet(val){
-          console.log('修改')
-          console.log(val);
-          this.type_info.map((s, index) => {
-            if (s.type_name === val) {
-              this.type_id = this.type_info[index].type_id;
-              console.log(this.type_id);
-              this.formEdit.type_id = this.type_id;
-            }
-          })
         },
 
         handleSave(){
@@ -687,7 +524,6 @@ export default {
          */
         handleEdit(index, rowData) {
           console.log(rowData)
-              this.type_info.type_name = rowData.type_id;
             //var msg = "索引是:" + index + ",行内容是:" + JSON.stringify(rowData);
             //this.$message({message: msg,type: "success"});
             this.dialogEdittVisible = true;//等dom渲染完，读取data中初始值，然后再复制，这样重置的是data中初始值
@@ -696,13 +532,6 @@ export default {
                 this.formEditTitle='编辑';
                 this.formEditDisabled=false;
                 this.formEdit= Object.assign({}, rowData);
-                this.type_info.map((s, index) => {
-                  if (s.type_name === rowData.type_id) {
-                    this.type_id = this.type_info[index].type_id;
-                    console.log(this.type_id);
-                    this.formEdit.type_id = this.type_id;
-                  }
-                })
                 this.formEdit.gender+='';//必须转换成字符串才能回显
             });
         },

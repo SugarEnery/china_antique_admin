@@ -17,7 +17,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="鉴定费" prop="price">
-                  <el-input v-model="form2.price" placeholder="请输入鉴定费"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
+                  <el-input v-model="form2.price" placeholder="请输入鉴定费"  onkeyup="this.value = this.value.replace(/[^\d.]/g,'')"></el-input>
               </el-form-item>
               <el-form-item label="专家头像" prop="image">
                 <el-upload

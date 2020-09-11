@@ -132,7 +132,9 @@ export default {
       headers() {
           return {
               'Authorization': localStorage.getItem('Authorization'),
-              'Access-Control-Allow-Headers':'x-requested-with:content-type'
+              'Access-Control-Allow-Headers':'x-requested-with:content-type',
+            'userToken' : localStorage.getItem("token"),
+            'uid' : localStorage.getItem("uid")
           }
       }
   },

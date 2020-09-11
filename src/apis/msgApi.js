@@ -139,21 +139,22 @@ export default {
       }
       return Axios.get('/napi/homeApi/appraisalList?'+params);
     },
-    // 平台鉴定提交
+    // 平台鉴定提交1
     platformIdentifi({id,expert_opinion,dating}){
         var param={
             id,
             expert_opinion,
-            dating
+            dating,
         };
         return Axios.post('/napi/homeApi/appraisalUpdate', param);
     },
-    // 专家鉴定提交
-    expertsIdentifi({id,expert_opinion,dating}){
+    // 专家鉴定提交2
+    expertsIdentifi({id,expert_opinion,collection_name,collection_year}){
         var param={
             id,
             expert_opinion,
-            dating
+            collection_name,
+            collection_year
         };
         return Axios.post('/napi/homeApi/appraisalUpdate', param);
     },

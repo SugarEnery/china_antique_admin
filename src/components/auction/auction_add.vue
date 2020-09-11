@@ -17,8 +17,7 @@
 ></el-input>
               </el-form-item>
               <el-form-item label="加价幅度" prop="markup_range">
-                  <el-input v-model="form2.markup_range" placeholder="加价幅度" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
- ></el-input>
+                  <el-input v-model="form2.markup_range" placeholder="加价幅度" onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"></el-input>
               </el-form-item>
               <el-form-item label="拍卖分类" prop="id">
                 <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >

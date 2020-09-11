@@ -1,54 +1,31 @@
 <template >
     <div>
+      <!-- 专家鉴定2 -->
         <!-- {{personInfo}} -->
         <!-- 查询区----start -->
         <div class="container form02">
             <el-form :label-position="labelPosition" :rules="rules" ref="form02" :label-width="labelWidth" :inline="false" :model="form2" class="demo-form-inline">
-              <el-form-item label="名称" prop="name">
-                  <el-input v-model="form2.name" placeholder="名称" disabled=""></el-input>
-              </el-form-item>
-              <!-- <el-form-item label="订单价格" prop="order_price">
-                  <el-input v-model="form2.order_price" placeholder="订单价格" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
- disabled=""></el-input>
-              </el-form-item>
-              <el-form-item label="订单号" prop="order_sn">
-                  <el-input v-model="form2.order_sn" placeholder="订单号" onkeyup="this.value=this.value.replace(/[^\d.]/g,'');" disabled="" ></el-input>
-              </el-form-item> -->
-              <el-form-item label="专家" prop="expert_name">
-                  <el-input v-model="form2.expert_name" placeholder="专家"  disabled="" ></el-input>
-              </el-form-item>
-              <!-- <el-form-item label="藏品" prop="collection_name">
-                  <el-input v-model="form2.collection_name" placeholder="藏品"  disabled="" ></el-input>
-              </el-form-item>
-              <el-form-item label="藏品年代" prop="collection_year">
-                  <el-input v-model="form2.collection_year" placeholder="藏品年代" disabled=""></el-input>
-              </el-form-item> -->
-              <el-form-item label="图片" prop="image" width="120">
-                <img width="100%" :src="form2.image" alt="">
-              </el-form-item>
-              <!-- <el-form-item label="专家意见" prop="expert_opinion"  >
-                  <el-input type="textarea" :rows="2" v-model="form2.expert_opinion" disabled=""></el-input>
-              </el-form-item> -->
-              <!-- <el-form-item label="年代" prop="collection_year" >
-                  <el-input type="textarea" :rows="2" v-model="form2.collection_year" disabled=""></el-input>
-              </el-form-item> -->
               <el-form-item label="藏品名称" prop="collection_name">
-                  <el-input v-model="form2.collection_name" placeholder="鉴定藏品名称" ></el-input>
+                  <el-input v-model="form2.collection_name" placeholder="藏品名称"></el-input>
               </el-form-item>
               <el-form-item label="藏品年代" prop="collection_year">
                   <el-input v-model="form2.collection_year" placeholder="鉴定藏品年代" ></el-input>
               </el-form-item>
-              <el-form-item label="平台意见" prop="平台意见">
+              <!-- <el-form-item label="断代" prop="dating">
+                  <el-input v-model="form2.dating" placeholder="断代" ></el-input>
+              </el-form-item> -->
+              <!-- <el-form-item label="图片" prop="image" width="120">
+                <img width="50%" :src="form2.image" alt="">
+              </el-form-item> -->
 
-              </el-form-item>
-              <div class="box-container" >
-                  <Ueditor @ready="editorReady"
-                    ref="ue"
-                    :value="defaultMSG"
-                    :ueditorConfig="config"
-                    style="width:100%;">
-                  </Ueditor>
-              </div>
+                <div class="box-container">
+                    <Ueditor @ready="editorReady"
+                      ref="ue"
+                      :value="defaultMSG"
+                      :ueditorConfig="config"
+                      style="width:100%;">
+                    </Ueditor>
+                </div>
               <el-form-item label=" ">
                     <el-button type="primary" @click="submitForm('form2')">立即创建</el-button>
                 </el-form-item>
@@ -96,20 +73,17 @@ export default {
       form2: {
         //表单对象
         id:"",
-        name: "",
-        order_price: "",
-        order_sn:"",
-        image: "",
-        order_status: "",
-        starting_price:"",
-        expert_opinion:'',
+        collection_name: "",
+        collection_year: "",
         dating:"",
+        expert_opinion: "",
+        image: "",
         doUpload:'/napi/homeApi/upload',
         dialogImageUrl: '',
         dialogVisible: false,
         productImgs: [],
         isMultiple: true,
-        imgLimit: 1
+        imgLimit: 1,
       },
       defaultMSG: null,
       form: {
@@ -152,15 +126,16 @@ export default {
         console.log(routerParams);
         // 将数据放在当前组件的数据内
         this.form2.id = this.personInfo.id;
-        this.form2.name = this.personInfo.name;
-        this.form2.image = this.personInfo.image;
-        this.form2.expert_name = this.personInfo.expert_name;
-        this.form2.order_price = this.personInfo.order_price;
-        this.form2.order_status = this.personInfo.order_status;
-        this.form2.expert_opinion = this.personInfo.expert_opinion;
         this.form2.collection_name = this.personInfo.collection_name;
-        this.form.content = this.personInfo.expert_opinion;
+        this.form2.image = this.personInfo.image;
+        this.form2.dating = this.personInfo.dating;
         this.form2.collection_year = this.personInfo.collection_year;
+        this.form2.order_status = this.personInfo.order_status;
+        if(this.personInfo.expert_opinion !=null){
+          this.form.content = this.personInfo.expert_opinion;
+          this.form2.expert_opinion = this.personInfo.expert_opinion;
+        }
+        this.form.dating = this.personInfo.dating;
     },
     // 编辑器
     editorReady(instance) {
