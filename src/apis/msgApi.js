@@ -56,6 +56,10 @@ export default {
     auctionTypeList(param){
         return Axios.get('/napi/homeApi/auctionTypeList', param);
     },
+    // 专家分类列表
+    expertsTypeList(param){
+        return Axios.get('/napi/homeApi/getExpertTypeList', param);
+    },
     // 拍卖批量删除
     auctionDelete({ids}){
       var param ={

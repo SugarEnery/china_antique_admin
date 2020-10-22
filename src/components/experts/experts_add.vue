@@ -41,10 +41,6 @@
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-
-              <el-form-item label="主图链接" prop="image">
-                  <el-input v-model="form2.image" placeholder="主图链接"></el-input>
-              </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
                     ref="ue"
@@ -136,7 +132,8 @@ export default {
   computed: {
       headers() {
           return {
-              'Authorization': localStorage.getItem('Authorization'),
+              'userToken': localStorage.getItem("token"),
+              'uid' : localStorage.getItem("uid"),
               'Access-Control-Allow-Headers':'x-requested-with:content-type'
           }
       }
@@ -182,7 +179,7 @@ export default {
     },
     // 拍卖分类列表下拉菜单
     auctionTypeListApi() {//初始化下拉框动态数据
-        apis.msgApi.auctionTypeList()
+        apis.msgApi.expertsTypeList()
         .then((data)=>{
           console.log(data)
             if(data&&data.data){

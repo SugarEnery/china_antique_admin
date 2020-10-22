@@ -16,13 +16,6 @@ const router = new VueRouter({
         title: '登陆'
       }
     },
-    // {
-    //   path: '/tree',
-    //   component: resolve => require(['@/components/mayi/tree.vue'], resolve),
-    //   meta: {
-    //     title: '蚂蚁种树'
-    //   }
-    // },
     {
       path: '/select',
       component: resolve => require(['@/components/select.vue'], resolve),
@@ -30,10 +23,6 @@ const router = new VueRouter({
         title: '微信平台'
       }
     },
-    // {
-    //   path: '/zanzhu',
-    //   component: resolve => require(['../components/zanzhu.vue'], resolve)
-    // },
     {
       path: '/bottom',
       component: resolve => require(['../components/flex/bottom.vue'], resolve)
@@ -68,11 +57,6 @@ axios.interceptors.request.use(
     else{
       console.log("失效！")
     }
-    //判断如果登录了就把token配置到axios的协议中
-    //     let token = localStorage.getItem("token")
-    //     if (token) {
-    //         config.headers['Authorization'] = token
-    //     }
     return config;
   },
   error => {
@@ -86,7 +70,13 @@ axios.defaults.timeout = 5000;//毫秒
  */
 axios.interceptors.response.use(function (response) {
   // Do something with response data
-  console.log('<<<请求成功');
+  // console.log('<<<请求成功');
+  console.log(response);
+  if(response.code == '-1'){
+    localStorage.setItem('token',null)
+  }else{
+    console.log('<<<请求成功');
+  }
   return response;
 }, error => {
   // Do something with response error
@@ -101,9 +91,10 @@ router.beforeEach((to, from, next) => {
     next();
   }
   else {
-    var token = localStorage.getItem('Authorization');
+    var token = localStorage.getItem('token');
+    console.log(token)
     //如果没登录,都导向登录页
-    if ((token === 'null' || token === '')) {
+    if ((token == 'null' || token == '')) {
       if (to.path !== '/login') {
         next({ path: '/login' })
       }

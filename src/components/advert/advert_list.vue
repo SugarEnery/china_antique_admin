@@ -57,20 +57,9 @@
                 {{ scope.row.status == null ? '暂无' :scope.row.status == 1? '上线' :scope.row.status == 2 ? '下线':''}}
               </template>
             </el-table-column>
-            <el-table-column prop="auction_type_name" label="拍卖分类" align="center">
-              <template slot-scope="scope">
-                 {{ scope.row.auction_type_name == null? '暂无' :scope.row.auction_type_name }}
-              </template>
+            <el-table-column prop="ads_type_name" label="位置" align="center"  min-width="100" >
             </el-table-column>
-            <el-table-column prop="starting_price" label="开始价格" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.starting_price == null? '暂无' :scope.row.starting_price }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="markup_range" label="加价价格" align="center" min-width="150">
-              <template slot-scope="scope">
-                 {{ scope.row.markup_range == null? '暂无' :scope.row.markup_range }}
-              </template>
+            <el-table-column prop="ads_url_type_name" label="跳转位置" align="center"  min-width="100" >
             </el-table-column>
             <el-table-column prop="image" label="广告图" align="center"  min-width="100" >
                <!-- 图片的显示 -->
@@ -80,7 +69,6 @@
             </el-table-column>
             <el-table-column prop="content" label="详情" align="center"  min-width="100" >
             </el-table-column>
-
             <el-table-column prop="start_time" label="开始时间" align="center" min-width="200">
               <template slot-scope="scope">
                 <font v-if="scope.row.start_time == 0" >暂无</font>
@@ -140,7 +128,6 @@
     .el-form-item__content {
         // width: 240px;
     }
-
 }
 .autionBox{
   .el-table__header tr,
@@ -216,25 +203,21 @@ export default {
     mounted(){
       this.onSearch();
       this.advertTypeListApi();
-      // this.userList();
-      // this.departList();
       var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-增删改查页"
       };
 
-      // getSourceList.sourceApi.getSourceList(getSourceList);
     },
     methods: {
         // 广告位置列表下拉菜单
         advertTypeListApi() {//初始化下拉框动态数据
             apis.msgApi.advertTypeList()
             .then((data)=>{
-              console.log(data)
+              // console.log(data)
                 if(data&&data.data){
                     var json=data.data;
                     if(json&& json.code == 1 ){
-                      console.log(json)
                       // var advertTypeList_info = data.data.data
                       this.advertTypeList_info = data.data.data.ads_type_list;
                       // 跳转位置
@@ -249,7 +232,7 @@ export default {
             });
         },
         selectGet(val){
-          console.log(val)
+          // console.log(val)
           this.advertTypeList_info.map((s, index) => {
             if (s.name === val) {
               this.id = this.advertTypeList_info[index].id;
@@ -288,133 +271,6 @@ export default {
                 this.listLoading=false;
                 this.$message({message: '查询异常，请重试',type: "error"});
             });
-        },
-        // 选择用户类型导出用户
-        exportExcel () {
-            this.listLoading=true;
-            let params = Object.assign({}, this.formSearch,this.pageInfo);
-            apis.msgApi.clientLead(params)
-            .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-                    }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '客户列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
-            });
-
-        },
-        // 导出未分配资源用户
-        exportundistributed () {
-            this.listLoading=true;
-            apis.msgApi.unclientLead()
-            .then((data)=>{
-              // console.log(data);
-              this.listLoading=false;
-              if(data.data.error_code == 1000){
-                this.$message({message: data.data.msg ,type: "error"});
-              }else{
-                this.tableData = data.data;
-                setTimeout( function(){
-                   let fix = document.querySelector('.el-table__fixed-right');
-                    let wb;
-                    //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-                    if(fix){
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table').removeChild(fix));
-                      document.querySelector('#out-table').appendChild(fix);
-                    }else{
-                      wb = XLSX.utils.table_to_book(document.querySelector('#out-table'));
-                    }
-                    /* get binary string as output */
-                    var wbout = XLSX.write(wb, {
-                      bookType: 'xlsx',
-                      bookSST: true,
-                      type: 'array'
-                    });
-                    try {
-                      FileSaver.saveAs(
-                        new Blob([wbout], {
-                          type: 'application/octet-stream'
-                        }),
-                        '未分配资源列表.xlsx'
-                      );
-                    } catch (e) {
-                      if (typeof console !== 'undefined') console.log(e, wbout);
-                    }
-                    return wbout;
-                    this.$message({message: '导出成功',type: "success"});
-                }, 1 * 500 );
-
-              }
-            })
-            .catch((err)=>{
-              this.$message({message: '执行失败，请重试',type: "error"});
-              console.log(err)
-            });
-
-        },
-        // 部门列表
-        departList() {
-          apis.msgApi.departList()
-          .then((data)=>{
-            // console.log(data)
-              if(data&&data.data){
-                  var json=data.data;
-                  if(json&&data.status==200){
-                    this.depart_info = json;
-                  }
-              }
-
-          })
-          .catch((err)=>{
-            this.$message({message: '执行失败，请重试',type: "error"});
-          console.log(err)
-          });
-        },
-        departGet(val){
-          console.log(val)
-          this.depart_info.map((s, index) => {
-            if (s.depart_name === val) {
-              this.id = this.depart_info[index].id;
-              console.log(this.id);
-              this.formSearch.depart_id = this.id;
-            }
-          })
         },
         compare(attr) {
             return function(a,b){

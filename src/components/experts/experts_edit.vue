@@ -131,10 +131,9 @@ export default {
   computed: {
       headers() {
           return {
-              'Authorization': localStorage.getItem('Authorization'),
-              'Access-Control-Allow-Headers':'x-requested-with:content-type',
-            'userToken' : localStorage.getItem("token"),
-            'uid' : localStorage.getItem("uid")
+              'userToken': localStorage.getItem("token"),
+              'uid' : localStorage.getItem("uid"),
+              'Access-Control-Allow-Headers':'x-requested-with:content-type'
           }
       }
   },

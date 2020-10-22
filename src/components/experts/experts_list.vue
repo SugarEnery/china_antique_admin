@@ -12,7 +12,6 @@
                   <el-option label="从晚到早" value="2"></el-option>
                </el-select>
             </el-form-item>
-
             <el-form-item label=" " style="margin-left:50px;">
                 <el-button type="primary" @click="onSearch">查询</el-button>
                 <el-button type="warning" plain @click="onReset">重置</el-button>
@@ -41,15 +40,23 @@
                  {{ scope.row.name == null? '暂无' :scope.row.name }}
               </template>
             </el-table-column>
-            <el-table-column prop="type" label="类型" align="center" min-width="120" >
+            <!-- <el-table-column prop="type" label="标签" align="center" min-width="50">
+              <template slot-scope="scope">
+                <div v-for="(item, index) in auctionType_info" :key="index" >
+                  <div v-if="scope.row.id == 1" >陶瓷</div>
+                  <div v-else-if="scope.row.id == 2" >玉器</div>
+
+                </div>
+              </template>
+            </el-table-column> -->
+            <el-table-column prop="type" label="类型" align="center" min-width="50" >
               <!-- 遍历类型 -->
               <template slot-scope="scope">
                 <div v-for="(item, index) in auctionType_info" :key="index" >
-                  <!-- {{ item }} -->
-                  <!-- {{index}} -->
-                  <!-- {{scope.row.name}} -->
-                  <div v-if="scope.row.name == index" >1111</div>
-                  <div v-slse-if="scope.row.name != index" >22222</div>
+<!-- {{index}} -->
+<!-- {{scope.row.name}} -->
+                  <div v-if="scope.row.id == 1" >陶瓷</div>
+                  <div v-else-if="scope.row.id == 2" >玉器</div>
 
                 </div>
               </template>
@@ -222,7 +229,7 @@ export default {
             var _this = this;
             apis.msgApi.expertsList(params)
             .then((data)=>{
-              // console.log(data.data);
+              console.log(data.data);
                 this.listLoading=false;
                 if (data && data.data) {
                   var json = data.data.data;
@@ -248,7 +255,6 @@ export default {
                 if(data&&data.data){
                     var json=data.data;
                     if(json&& json.code == 1 ){
-                      console.log(json)
                       this.auctionType_info = data.data.data;
                     }
                 }
@@ -258,16 +264,6 @@ export default {
             console.log(err)
             });
         },
-        // selectGet(val){
-        //   console.log(val)
-        //   this.auctionType_info.map((s, index) => {
-        //     if (s.name === val) {
-        //       this.id = this.auctionType_info[index].id;
-        //       console.log(this.id);
-        //       this.form2.type = this.id;
-        //     }
-        //   })
-        // },
         compare(attr) {
             return function(a,b){
                 var val1 = a[attr];

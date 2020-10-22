@@ -65,10 +65,6 @@
                   <img width="100%" :src="form2.dialogImageUrl" alt="">
                 </el-dialog>
               </el-form-item>
-
-              <el-form-item label="主图链接" prop="image">
-                  <el-input v-model="form2.image" placeholder="主图链接"></el-input>
-              </el-form-item>
               <div class="box-container">
                   <Ueditor @ready="editorReady"
                     ref="ue"
@@ -162,7 +158,8 @@ export default {
   computed: {
       headers() {
           return {
-              'Authorization': localStorage.getItem('Authorization'),
+              'userToken': localStorage.getItem("token"),
+              'uid' : localStorage.getItem("uid"),
               'Access-Control-Allow-Headers':'x-requested-with:content-type'
           }
       }
@@ -226,7 +223,7 @@ export default {
     handleAvatarSuccess(res, file) {//图片上传成功
       console.log(res);
       console.log(file);
-      this.form2.image = "http://api.chinabogu.com/"+res.data.filePath;
+      this.form2.image = "http://api.chinabogu.com"+res.data.filePath;
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleExceed(files, fileList) {//图片上传超过数量限制

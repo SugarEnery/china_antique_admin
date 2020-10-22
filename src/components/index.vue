@@ -65,40 +65,21 @@ export default {
           text += "失败";
           log(text);
         });
-      console.log(text);
-
+      // console.log(text);
       function log(text) {
         var loginLog = {
           ip: returnCitySN["cip"],
           city: returnCitySN["cname"] + "-" + text
         };
-
         apis.shiroApi.loginLog(loginLog);
       }
     },
-    // openZanZhu(){
-    //   this.$common.OpenNewPage(this,'zanzhu');
-    // },
-    // getZanZhu(){
-    //   apis.mayiApi.getZanZhu().then(res=>{
-    //     if(res.status=="200"){
-    //       if(res.data.dataList){
-    //         this.zanzhu=res.data.dataList;
-    //       }
-    //     }
-    //   }).catch(
-
-    //   );
-    // },
     getDate(param){
       return this.$common.toDate(param);
     }
   },
   mounted() {
-    
     // location.reload();
-    // this.getZanZhu();
-
   },
   computed:{
 
