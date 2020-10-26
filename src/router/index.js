@@ -72,12 +72,15 @@ axios.interceptors.response.use(function (response) {
   // Do something with response data
   // console.log('<<<请求成功');
   console.log(response);
-  if(response.code == '-1'){
-    localStorage.setItem('token',null)
+  if(response.data.code == '-1'){
+    console.log('<<<请求失败');
+    localStorage.setItem('token','空')
+    return response;
   }else{
     console.log('<<<请求成功');
+    return response;
   }
-  return response;
+
 }, error => {
   // Do something with response error
   console.log('<<<异常信息:', error.message);
@@ -94,8 +97,11 @@ router.beforeEach((to, from, next) => {
     var token = localStorage.getItem('token');
     console.log(token)
     //如果没登录,都导向登录页
-    if ((token == 'null' || token == '')) {
+    //  || token == ''
+    if (token == 'null'|| token == ''|| token == '空') {
+      console.log(1111111)
       if (to.path !== '/login') {
+        console.log(22222222222222)
         next({ path: '/login' })
       }
       else {
