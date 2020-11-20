@@ -102,11 +102,11 @@ export default {
             }
         };
         this.getCookie();
-        var loginLog = {
-            ip: returnCitySN["cip"],
-            city: returnCitySN["cname"] + '-' + '进入首页'
-        };
-        apis.shiroApi.loginLog(loginLog);
+        // var loginLog = {
+        //     ip: returnCitySN["cip"],
+        //     city: returnCitySN["cname"] + '-' + '进入首页'
+        // };
+        // apis.shiroApi.loginLog(loginLog);
     },
     methods: {
         login() {
@@ -117,7 +117,7 @@ export default {
                   this.formLogin.password = password;
             apis.shiroApi.loginIn(this.formLogin)
                 .then((data) => {
-                    // console.log('success:', data);
+                    console.log('success:', data);
                     // var access_token = data.access_token;
                     if (data && data.data) {
                         var json = data.data;
@@ -128,29 +128,30 @@ export default {
                             var token = json.data[0].token;
                             var uid = json.data[0].uid;
                             var name = json.data[0].name;
-                            // // localStorage.setItem('Authorization',token);
                             localStorage.setItem('token',token);
                             localStorage.setItem('uid',uid);
                             localStorage.setItem('name',name);
-
+                            
+                            window.sessionStorage.setItem('uid',uid);
+                            window.sessionStorage.setItem('token',token);
                             this.$common.setSessionStorage('username',json.data[0].name);
-
-                            //存储按钮权限
-                            this.$store.dispatch("add_Permissions", json.data.rolePermissionVoList);
                             this.$router.replace({ path: "/index" });
-                            var loginLog={
-                                ip:returnCitySN["cip"],
-                                city:returnCitySN["cname"]+'-'+json.data[0].name +'-登陆'
-                            };
-                            apis.shiroApi.loginLog(loginLog);
-                            return;
+                            //存储按钮权限
+                            // this.$store.dispatch("add_Permissions", json.data.rolePermissionVoList);
+                            // this.$router.replace({ path: "/index" });
+                            // var loginLog={
+                            //     ip:returnCitySN["cip"],
+                            //     city:returnCitySN["cname"]+'-'+json.data[0].name +'-登陆'
+                            // };
+                            // apis.shiroApi.loginLog(loginLog);
+                            // return;
                         }
                         else if (json.message) {
                             this.errorInfo.text = json.message;
                         }
                     }
-                    this.errorInfo.isShowError = true;
-                    this.$store.dispatch("loginLog",loginLog);
+                    // this.errorInfo.isShowError = true;
+                    // this.$store.dispatch("loginLog",loginLog);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -203,25 +204,25 @@ export default {
                     this.$alert(alertText, '提示', {
                         confirmButtonText: '确定',
                     });
-                    log(text);
+                    // log(text);
                 })
                 .catch(e => {
                     this.$alert('数据还原异常,请重试', '提示', {
                         confirmButtonText: '确定',
                     });
                     text += '失败';
-                    log(text);
+                    // log(text);
                 });
-            console.log(text);
+            // console.log(text);
 
-            function log(text){
-                 var loginLog = {
-                ip: returnCitySN["cip"],
-                city: returnCitySN["cname"] + '-' + text
-            };
+            // function log(text){
+            //   var loginLog = {
+            //     ip: returnCitySN["cip"],
+            //     city: returnCitySN["cname"] + '-' + text
+            //   };
 
-            apis.shiroApi.loginLog(loginLog);
-            }
+            // apis.shiroApi.loginLog(loginLog);
+            // }
 
         }
     }

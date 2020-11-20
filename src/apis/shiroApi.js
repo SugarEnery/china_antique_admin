@@ -12,7 +12,6 @@ export default {
             mobile: loginName,
             password: password
         };
-        // return Axios.post('/api/shiro-api/login', param);
         return Axios.post('/napi/homeApi/login', param);
     },
     /**

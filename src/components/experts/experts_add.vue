@@ -6,6 +6,9 @@
               <el-form-item label="名称" prop="name">
                   <el-input v-model="form2.name" placeholder="名称"></el-input>
               </el-form-item>
+              <el-form-item label="标签" prop="tag">
+                  <el-input v-model="form2.tag" placeholder="标签"></el-input>
+              </el-form-item>
               <el-form-item label="分类" prop="type">
                 <el-select v-model="auctionType_info.name"  placeholder="请选择分类"   @change="selectGet(auctionType_info.name)"  >
                     <el-option
@@ -97,6 +100,7 @@ export default {
       form2: {
         //表单对象
         name: "",
+        tag:'',
         image:"",
         price:'',
         link:'',
