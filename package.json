@@ -34,7 +34,7 @@
     "vue-socket.io": "^3.0.9",
     "vuex": "^2.5.0",
     "vuex-persist": "^1.8.0",
-    "xlsx": "^0.16.2"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
